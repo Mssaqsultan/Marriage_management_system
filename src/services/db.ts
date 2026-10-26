@@ -143,6 +143,58 @@ const SEED_FAMILIES: Family[] = [
     notes: 'Primary Host Family for Sultan Ki Shaadi',
     created_at: '2026-09-01T10:00:00.000Z',
     updated_at: '2026-09-01T10:00:00.000Z'
+  },
+  {
+    id: 'fam-2',
+    name: 'Siddiqui Family',
+    head_guest_id: 'gst-2',
+    address: 'Near Shahi Masjid, Ward 4',
+    village: 'Rampur',
+    district: 'Rampur',
+    state: 'Uttar Pradesh',
+    mobile: '9812345678',
+    notes: 'Primary Host Family for Rizwan Ki Shaadi',
+    created_at: '2026-09-01T10:00:00.000Z',
+    updated_at: '2026-09-01T10:00:00.000Z'
+  },
+  {
+    id: 'fam-3',
+    name: 'Rashid Khan Household',
+    head_guest_id: 'gst-3',
+    address: 'Kisan Marg, Sector 2',
+    village: 'Chauriya khas',
+    district: 'Lucknow',
+    state: 'Uttar Pradesh',
+    mobile: '9834567890',
+    notes: 'Mama side family with historical connections',
+    created_at: '2026-09-01T10:00:00.000Z',
+    updated_at: '2026-09-01T10:00:00.000Z'
+  },
+  {
+    id: 'fam-4',
+    name: 'Haji Qureshi Family',
+    head_guest_id: 'gst-5',
+    address: 'Gomti Nagar Extension, Plot 12',
+    village: 'Lucknow',
+    district: 'Lucknow',
+    state: 'Uttar Pradesh',
+    mobile: '9712345678',
+    notes: 'Bride side close elders',
+    created_at: '2026-09-01T10:00:00.000Z',
+    updated_at: '2026-09-01T10:00:00.000Z'
+  },
+  {
+    id: 'fam-5',
+    name: 'Ansari & Sons Family',
+    head_guest_id: 'gst-6',
+    address: 'Bunkar Colony, Civil Lines',
+    village: 'Azamgarh',
+    district: 'Azamgarh',
+    state: 'Uttar Pradesh',
+    mobile: '9612345678',
+    notes: 'Respected maternal branch',
+    created_at: '2026-09-01T10:00:00.000Z',
+    updated_at: '2026-09-01T10:00:00.000Z'
   }
 ];
 
@@ -153,6 +205,7 @@ const SEED_GUESTS: Guest[] = [
     name: 'Sultan Salahuddin',
     father_husband_name: 'Haji Iqbal Khan',
     mobile: '9876543210',
+    alternate_mobile: '9876543211',
     address: 'Royal Haveli, Station Road',
     village: 'Chauriya khas',
     post: 'Chauriya khas',
@@ -161,7 +214,165 @@ const SEED_GUESTS: Guest[] = [
     pincode: '226001',
     relation: 'Brother',
     side: 'Host Side',
-    notes: 'Chief Host & Groom',
+    notes: 'Chief Host & Groom (Sultan Ki Shaadi)',
+    created_at: '2026-09-01T10:00:00.000Z',
+    updated_at: '2026-09-01T10:00:00.000Z'
+  },
+  {
+    id: 'gst-2',
+    family_id: 'fam-2',
+    name: 'Mukhtar Ahmad Siddiqui',
+    father_husband_name: 'Janab Asghar Siddiqui',
+    mobile: '9812345678',
+    alternate_mobile: '9812345679',
+    address: 'Ward 4, Near Shahi Masjid',
+    village: 'Rampur',
+    post: 'Rampur City',
+    district: 'Rampur',
+    state: 'Uttar Pradesh',
+    pincode: '244901',
+    relation: 'Brother',
+    side: 'Host Side',
+    notes: 'Chief Host (Rizwan Ki Shaadi)',
+    created_at: '2026-09-01T10:00:00.000Z',
+    updated_at: '2026-09-01T10:00:00.000Z'
+  },
+  {
+    id: 'gst-3',
+    family_id: 'fam-3',
+    name: 'Rashid Khan',
+    father_husband_name: 'Janab Afzal Khan',
+    mobile: '9834567890',
+    alternate_mobile: '9834567899',
+    address: 'Kisan Marg, Sector 2',
+    village: 'Chauriya khas',
+    post: 'Chauriya khas',
+    district: 'Lucknow',
+    state: 'Uttar Pradesh',
+    pincode: '226001',
+    relation: 'Mama',
+    side: 'Groom Side',
+    notes: 'Arrived with entire family; prestigious elder',
+    created_at: '2026-09-01T10:00:00.000Z',
+    updated_at: '2026-09-01T10:00:00.000Z'
+  },
+  {
+    id: 'gst-4',
+    family_id: 'fam-3',
+    name: 'Bilal Khan',
+    father_husband_name: 'Rashid Khan',
+    mobile: '9834567891',
+    village: 'Chauriya khas',
+    district: 'Lucknow',
+    state: 'Uttar Pradesh',
+    relation: 'Cousin',
+    side: 'Groom Side',
+    notes: "Rashid Khan's eldest son",
+    created_at: '2026-09-01T10:00:00.000Z',
+    updated_at: '2026-09-01T10:00:00.000Z'
+  },
+  {
+    id: 'gst-5',
+    family_id: 'fam-4',
+    name: 'Maqbool Qureshi',
+    father_husband_name: 'Haji Mushtaq Qureshi',
+    mobile: '9712345678',
+    address: 'Gomti Nagar Extension, Plot 12',
+    village: 'Lucknow',
+    district: 'Lucknow',
+    state: 'Uttar Pradesh',
+    pincode: '226010',
+    relation: 'Chacha',
+    side: 'Bride Side',
+    notes: 'Respected elder & teacher',
+    created_at: '2026-09-01T10:00:00.000Z',
+    updated_at: '2026-09-01T10:00:00.000Z'
+  },
+  {
+    id: 'gst-6',
+    family_id: 'fam-5',
+    name: 'Tariq Ansari',
+    father_husband_name: 'Haji Bashir Ansari',
+    mobile: '9612345678',
+    address: 'Bunkar Colony',
+    village: 'Azamgarh',
+    district: 'Azamgarh',
+    state: 'Uttar Pradesh',
+    pincode: '276001',
+    relation: 'Mama',
+    side: 'Bride Side',
+    notes: 'Handloom textile merchant',
+    created_at: '2026-09-01T10:00:00.000Z',
+    updated_at: '2026-09-01T10:00:00.000Z'
+  },
+  {
+    id: 'gst-7',
+    name: 'Danish Ali',
+    father_husband_name: 'Zahid Ali',
+    mobile: '9512345678',
+    village: 'Delhi',
+    district: 'South Delhi',
+    state: 'Delhi',
+    pincode: '110025',
+    relation: 'Friend',
+    side: 'Groom Side',
+    notes: 'College friend of Sultan',
+    created_at: '2026-09-01T10:00:00.000Z',
+    updated_at: '2026-09-01T10:00:00.000Z'
+  },
+  {
+    id: 'gst-8',
+    name: 'Farhan Khan',
+    father_husband_name: 'Nawab Aslam Khan',
+    mobile: '9412345678',
+    village: 'Rampur',
+    district: 'Rampur',
+    state: 'Uttar Pradesh',
+    relation: 'Fufa',
+    side: 'Host Side',
+    notes: 'Arrived early to help coordinate arrangements',
+    created_at: '2026-09-01T10:00:00.000Z',
+    updated_at: '2026-09-01T10:00:00.000Z'
+  },
+  {
+    id: 'gst-9',
+    name: 'Salman Sheikh',
+    father_husband_name: 'Kareem Sheikh',
+    mobile: '9312345678',
+    village: 'Kanpur',
+    district: 'Kanpur Nagar',
+    state: 'Uttar Pradesh',
+    relation: 'Business Partner',
+    side: 'Bride Side',
+    notes: 'Industrialist colleague',
+    created_at: '2026-09-01T10:00:00.000Z',
+    updated_at: '2026-09-01T10:00:00.000Z'
+  },
+  {
+    id: 'gst-10',
+    name: 'Imran Malik',
+    father_husband_name: 'Subedar Jameel Malik',
+    mobile: '9212345678',
+    village: 'Chauriya khas',
+    district: 'Lucknow',
+    state: 'Uttar Pradesh',
+    relation: 'Neighbor',
+    side: 'Groom Side',
+    notes: 'Respected village elder neighbor',
+    created_at: '2026-09-01T10:00:00.000Z',
+    updated_at: '2026-09-01T10:00:00.000Z'
+  },
+  {
+    id: 'gst-11',
+    name: 'Fatima Bibi',
+    father_husband_name: 'Syed Anwar',
+    mobile: '9112345678',
+    village: 'Lucknow',
+    district: 'Lucknow',
+    state: 'Uttar Pradesh',
+    relation: 'Mami',
+    side: 'Bride Side',
+    notes: 'Elder aunt',
     created_at: '2026-09-01T10:00:00.000Z',
     updated_at: '2026-09-01T10:00:00.000Z'
   }
@@ -262,10 +473,10 @@ class DatabaseService {
         if (cloudData.settings) {
           this.overrideSettings(cloudData.settings);
         }
-        console.log('✅ Successfully synced data from Supabase Cloud!');
+        console.log('Successfully synced data from Supabase Cloud!');
       }
     } catch (err) {
-      console.warn('⚠️ Cloud sync offline or failed, using local storage cache:', err);
+      console.warn('Cloud sync offline or failed, using local storage cache:', err);
     }
   }
 
