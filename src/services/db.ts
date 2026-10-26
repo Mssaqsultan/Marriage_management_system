@@ -59,10 +59,76 @@ const SEED_USERS: User[] = [
   }
 ];
 
-const SEED_EVENTS: Event[] = [];
-const SEED_CEREMONIES: Ceremony[] = [];
-const SEED_FAMILIES: Family[] = [];
-const SEED_GUESTS: Guest[] = [];
+const SEED_EVENTS: Event[] = [
+  {
+    id: 'evt-1',
+    event_code: 'EVT-2027-MAR',
+    name: 'Sultan Ki Grand Shaadi',
+    type: 'Marriage',
+    date: '2027-02-15',
+    venue: 'Royal Emerald Palace & Gardens, Chauriya khas',
+    host_name: 'Sultan Salahuddin & Family',
+    description: 'Grand Wedding Celebrations of Sultan with Haldi, Mehendi, Nikah & Walima',
+    status: 'Active',
+    created_at: '2026-09-01T10:00:00.000Z',
+    updated_at: '2026-09-01T10:00:00.000Z'
+  }
+];
+
+const SEED_CEREMONIES: Ceremony[] = [
+  {
+    id: 'crm-1-1',
+    event_id: 'evt-1',
+    name: 'Haldi & Manjha Rasam',
+    ceremony_type: 'Haldi',
+    date: '2027-02-13',
+    time: '11:00 AM',
+    venue: 'Sultan Haveli Courtyard, Chauriya khas',
+    description: 'Traditional turmeric blessing ritual and family gathering',
+    status: 'Upcoming',
+    created_at: '2026-09-01T10:00:00.000Z',
+    updated_at: '2026-09-01T10:00:00.000Z'
+  },
+  {
+    id: 'crm-1-2',
+    event_id: 'evt-1',
+    name: 'Mehendi Ki Raat & Sangeet',
+    ceremony_type: 'Mehendi',
+    date: '2027-02-14',
+    time: '07:30 PM',
+    venue: 'Emerald Royal Lawn, Chauriya khas',
+    description: 'Musical evening & traditional henna application',
+    status: 'Upcoming',
+    created_at: '2026-09-01T10:00:00.000Z',
+    updated_at: '2026-09-01T10:00:00.000Z'
+  },
+  {
+    id: 'crm-1-3',
+    event_id: 'evt-1',
+    name: 'Nikah & Main Barat Ceremony',
+    ceremony_type: 'Nikah',
+    date: '2027-02-15',
+    time: '01:00 PM',
+    venue: 'Royal Emerald Palace Grand Ballroom',
+    description: 'Main marriage nikah solemnization, Barat reception & auspicious Nevta ledger',
+    status: 'Live / Active',
+    created_at: '2026-09-01T10:00:00.000Z',
+    updated_at: '2026-09-01T10:00:00.000Z'
+  },
+  {
+    id: 'crm-1-4',
+    event_id: 'evt-1',
+    name: 'Royal Dawat-e-Walima / Reception',
+    ceremony_type: 'Walima',
+    date: '2027-02-18',
+    time: '07:00 PM',
+    venue: 'Taj Heritage Grand Hall, Lucknow',
+    description: 'Post-wedding grand feast and reception for all honorable guests',
+    status: 'Upcoming',
+    created_at: '2026-09-01T10:00:00.000Z',
+    updated_at: '2026-09-01T10:00:00.000Z'
+  }
+];
 
 class DatabaseService {
   private events: Event[] = [];
@@ -90,8 +156,8 @@ class DatabaseService {
       this.events = JSON.parse(localStorage.getItem(STORAGE_KEYS.EVENTS) || 'null') || [...SEED_EVENTS];
       this.eventTypes = JSON.parse(localStorage.getItem(STORAGE_KEYS.EVENT_TYPES) || 'null') || [...DEFAULT_EVENT_TYPES];
       this.ceremonies = JSON.parse(localStorage.getItem(STORAGE_KEYS.CEREMONIES) || 'null') || [...SEED_CEREMONIES];
-      this.guests = JSON.parse(localStorage.getItem(STORAGE_KEYS.GUESTS) || 'null') || [...SEED_GUESTS];
-      this.families = JSON.parse(localStorage.getItem(STORAGE_KEYS.FAMILIES) || 'null') || [...SEED_FAMILIES];
+      this.guests = JSON.parse(localStorage.getItem(STORAGE_KEYS.GUESTS) || 'null') || [];
+      this.families = JSON.parse(localStorage.getItem(STORAGE_KEYS.FAMILIES) || 'null') || [];
       this.transactions = JSON.parse(localStorage.getItem(STORAGE_KEYS.TRANSACTIONS) || 'null') || [];
       this.gifts = JSON.parse(localStorage.getItem(STORAGE_KEYS.GIFTS) || 'null') || [];
       this.auditLogs = JSON.parse(localStorage.getItem(STORAGE_KEYS.AUDIT_LOGS) || 'null') || [];
@@ -112,7 +178,6 @@ class DatabaseService {
       if (typeof (cloudSync as any).pullFromCloud === 'function') {
         const success = await (cloudSync as any).pullFromCloud();
         if (success) {
-          // Notify React components to re-render with newly fetched data!
           window.dispatchEvent(new Event('db_cloud_synced'));
         }
       }
@@ -143,9 +208,9 @@ class DatabaseService {
   }
 
   public resetToDefaults() {
-    this.events = [];
+    this.events = [...SEED_EVENTS];
     this.eventTypes = [...DEFAULT_EVENT_TYPES];
-    this.ceremonies = [];
+    this.ceremonies = [...SEED_CEREMONIES];
     this.guests = [];
     this.families = [];
     this.transactions = [];
@@ -238,19 +303,7 @@ class DatabaseService {
   public getEvents(includeArchived = false): Event[] { return this.events.filter(e => includeArchived || e.status !== 'Archived'); }
   public getEventById(id: string): Event | undefined { return this.events.find(e => e.id === id); }
   public getActiveEvent(): Event { 
-    return this.events.find(e => e.id === this.activeEventId) || this.events[0] || {
-      id: 'evt-1',
-      event_code: 'EVT-001',
-      name: 'Default Shaadi',
-      type: 'Marriage',
-      date: new Date().toISOString().split('T')[0],
-      venue: 'Main Venue',
-      host_name: 'Host',
-      description: 'Event',
-      status: 'Active',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    }; 
+    return this.events.find(e => e.id === this.activeEventId) || this.events[0] || SEED_EVENTS[0]; 
   }
   public setActiveEventId(id: string) {
     this.activeEventId = id;
@@ -602,15 +655,15 @@ class DatabaseService {
       const parsed = JSON.parse(jsonString);
       if (!parsed.data || !Array.isArray(parsed.data.events)) throw new Error('Invalid schema');
       this.events = parsed.data.events;
-      this.ceremonies = parsed.data.ceremonies || [];
+      this.ceremonies = parsed.data.ceremonies || [...SEED_CEREMONIES];
       this.guests = parsed.data.guests;
       this.families = parsed.data.families || [];
       this.transactions = parsed.data.transactions || [];
       this.gifts = parsed.data.gifts || [];
       this.auditLogs = parsed.data.auditLogs || [];
       this.settings = parsed.data.settings || DEFAULT_SETTINGS;
-      this.activeEventId = parsed.data.activeEventId || '';
-      this.activeCeremonyId = parsed.data.activeCeremonyId || '';
+      this.activeEventId = parsed.data.activeEventId || 'evt-1';
+      this.activeCeremonyId = parsed.data.activeCeremonyId || 'crm-1-3';
       if (parsed.data.users) this.users = parsed.data.users;
       this.saveAll();
       return true;
@@ -647,6 +700,7 @@ class DatabaseService {
       villageMap[vName].guests += 1;
 
       const gTxns = activeTxns.filter(t => t.guest_id === gid);
+      (async () => {})();
       const gNevta = gTxns.filter(t => t.type === 'nevta').reduce((s, t) => s + t.amount, 0);
       const gNahuchua = gTxns.filter(t => t.type === 'nahuchua').reduce((s, t) => s + t.amount, 0);
       const gTotal = gNevta + gNahuchua;
