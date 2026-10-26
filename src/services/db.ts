@@ -210,25 +210,7 @@ class DatabaseService {
     }
   }
 
-  private async initCloudSync() {
-    try {
-      if (typeof (cloudSync as any).fetchAllData === 'function') {
-        const cloudData = await (cloudSync as any).fetchAllData();
-        if (cloudData) {
-          if (cloudData.events?.length) this.overrideEvents(cloudData.events);
-          if (cloudData.ceremonies?.length) this.overrideCeremonies(cloudData.ceremonies);
-          if (cloudData.guests?.length) this.overrideGuests(cloudData.guests);
-          if (cloudData.families?.length) this.overrideFamilies(cloudData.families);
-          if (cloudData.transactions?.length) this.overrideTransactions(cloudData.transactions);
-          if (cloudData.gifts?.length) this.overrideGifts(cloudData.gifts);
-          if (cloudData.users?.length) this.overrideUsers(cloudData.users);
-          if (cloudData.settings) this.overrideSettings(cloudData.settings);
-        }
-      }
-    } catch (err) {
-      console.warn('Cloud sync offline or failed:', err);
-    }
-  }
+  initCloudSync
 
   private saveAll() {
     localStorage.setItem(STORAGE_KEYS.EVENTS, JSON.stringify(this.events));
