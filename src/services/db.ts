@@ -1,5 +1,5 @@
-import {
-  Event, Guest, Family, Transaction, Gift, AuditLog, AppSettings, GuestHistorySummary, User, Ceremony, ReturnGiftRecord, VyavharSummary
+import { 
+  Event, Guest, Family, Transaction, Gift, AuditLog, AppSettings, GuestHistorySummary, User, Ceremony, ReturnGiftRecord, VyavharSummary 
 } from '../types';
 import { cloudSync } from './supabaseSync';
 
@@ -59,113 +59,10 @@ const SEED_USERS: User[] = [
   }
 ];
 
-const SEED_EVENTS: Event[] = [
-  {
-    id: 'evt-1',
-    event_code: 'EVT-2027-MAR',
-    name: 'Sultan Ki Grand Shaadi',
-    type: 'Marriage',
-    date: '2027-02-15',
-    venue: 'Royal Emerald Palace & Gardens, Chauriya khas',
-    host_name: 'Sultan Salahuddin & Family',
-    description: 'Grand Wedding Celebrations of Sultan with Haldi, Mehendi, Nikah & Walima',
-    status: 'Active',
-    created_at: '2026-09-01T10:00:00.000Z',
-    updated_at: '2026-09-01T10:00:00.000Z'
-  }
-];
-
-const SEED_CEREMONIES: Ceremony[] = [
-  {
-    id: 'crm-1-1',
-    event_id: 'evt-1',
-    name: 'Haldi & Manjha Rasam',
-    ceremony_type: 'Haldi',
-    date: '2027-02-13',
-    time: '11:00 AM',
-    venue: 'Sultan Haveli Courtyard, Chauriya khas',
-    description: 'Traditional turmeric blessing ritual and family gathering',
-    status: 'Upcoming',
-    created_at: '2026-09-01T10:00:00.000Z',
-    updated_at: '2026-09-01T10:00:00.000Z'
-  },
-  {
-    id: 'crm-1-2',
-    event_id: 'evt-1',
-    name: 'Mehendi Ki Raat & Sangeet',
-    ceremony_type: 'Mehendi',
-    date: '2027-02-14',
-    time: '07:30 PM',
-    venue: 'Emerald Royal Lawn, Chauriya khas',
-    description: 'Musical evening & traditional henna application',
-    status: 'Upcoming',
-    created_at: '2026-09-01T10:00:00.000Z',
-    updated_at: '2026-09-01T10:00:00.000Z'
-  },
-  {
-    id: 'crm-1-3',
-    event_id: 'evt-1',
-    name: 'Nikah & Main Barat Ceremony',
-    ceremony_type: 'Nikah',
-    date: '2027-02-15',
-    time: '01:00 PM',
-    venue: 'Royal Emerald Palace Grand Ballroom',
-    description: 'Main marriage nikah solemnization, Barat reception & auspicious Nevta ledger',
-    status: 'Live / Active',
-    created_at: '2026-09-01T10:00:00.000Z',
-    updated_at: '2026-09-01T10:00:00.000Z'
-  },
-  {
-    id: 'crm-1-4',
-    event_id: 'evt-1',
-    name: 'Royal Dawat-e-Walima / Reception',
-    ceremony_type: 'Walima',
-    date: '2027-02-18',
-    time: '07:00 PM',
-    venue: 'Taj Heritage Grand Hall, Lucknow',
-    description: 'Post-wedding grand feast and reception for all honorable guests',
-    status: 'Upcoming',
-    created_at: '2026-09-01T10:00:00.000Z',
-    updated_at: '2026-09-01T10:00:00.000Z'
-  }
-];
-
-const SEED_FAMILIES: Family[] = [
-  {
-    id: 'fam-1',
-    name: 'Sultan Household',
-    head_guest_id: 'gst-1',
-    address: 'Main Royal Haveli, Station Road',
-    village: 'Chauriya khas',
-    district: 'Lucknow',
-    state: 'Uttar Pradesh',
-    mobile: '9876543210',
-    notes: 'Primary Host Family for Sultan Ki Shaadi',
-    created_at: '2026-09-01T10:00:00.000Z',
-    updated_at: '2026-09-01T10:00:00.000Z'
-  }
-];
-
-const SEED_GUESTS: Guest[] = [
-  {
-    id: 'gst-1',
-    family_id: 'fam-1',
-    name: 'Sultan Salahuddin',
-    father_husband_name: 'Haji Iqbal Khan',
-    mobile: '9876543210',
-    address: 'Royal Haveli, Station Road',
-    village: 'Chauriya khas',
-    post: 'Chauriya khas',
-    district: 'Lucknow',
-    state: 'Uttar Pradesh',
-    pincode: '226001',
-    relation: 'Brother',
-    side: 'Host Side',
-    notes: 'Chief Host & Groom',
-    created_at: '2026-09-01T10:00:00.000Z',
-    updated_at: '2026-09-01T10:00:00.000Z'
-  }
-];
+const SEED_EVENTS: Event[] = [];
+const SEED_CEREMONIES: Ceremony[] = [];
+const SEED_FAMILIES: Family[] = [];
+const SEED_GUESTS: Guest[] = [];
 
 class DatabaseService {
   private events: Event[] = [];
@@ -199,7 +96,7 @@ class DatabaseService {
       this.gifts = JSON.parse(localStorage.getItem(STORAGE_KEYS.GIFTS) || 'null') || [];
       this.auditLogs = JSON.parse(localStorage.getItem(STORAGE_KEYS.AUDIT_LOGS) || 'null') || [];
       this.settings = { ...DEFAULT_SETTINGS, ...JSON.parse(localStorage.getItem(STORAGE_KEYS.SETTINGS) || '{}') };
-      this.activeEventId = localStorage.getItem(STORAGE_KEYS.ACTIVE_EVENT_ID) || 'evt-1';
+      this.activeEventId = localStorage.getItem(STORAGE_KEYS.ACTIVE_EVENT_ID) || (this.events[0]?.id || 'evt-1');
       this.activeCeremonyId = localStorage.getItem(STORAGE_KEYS.ACTIVE_CEREMONY_ID) || 'crm-1-3';
       this.users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || 'null') || [...SEED_USERS];
       this.currentUser = JSON.parse(localStorage.getItem(STORAGE_KEYS.CURRENT_USER) || 'null');
@@ -213,7 +110,11 @@ class DatabaseService {
   private async initCloudSync() {
     try {
       if (typeof (cloudSync as any).pullFromCloud === 'function') {
-        await (cloudSync as any).pullFromCloud();
+        const success = await (cloudSync as any).pullFromCloud();
+        if (success) {
+          // Notify React components to re-render with newly fetched data!
+          window.dispatchEvent(new Event('db_cloud_synced'));
+        }
       }
     } catch (err) {
       console.warn('Cloud sync offline or failed:', err);
@@ -242,17 +143,15 @@ class DatabaseService {
   }
 
   public resetToDefaults() {
-    this.events = [...SEED_EVENTS];
+    this.events = [];
     this.eventTypes = [...DEFAULT_EVENT_TYPES];
-    this.ceremonies = [...SEED_CEREMONIES];
-    this.guests = [...SEED_GUESTS];
-    this.families = [...SEED_FAMILIES];
+    this.ceremonies = [];
+    this.guests = [];
+    this.families = [];
     this.transactions = [];
     this.gifts = [];
     this.auditLogs = [];
     this.settings = { ...DEFAULT_SETTINGS };
-    this.activeEventId = 'evt-1';
-    this.activeCeremonyId = 'crm-1-3';
     this.users = [...SEED_USERS];
     this.returnGifts = [];
     this.saveAll();
@@ -322,7 +221,13 @@ class DatabaseService {
   // --- Overrides ---
   public overrideUsers(users: User[]) { this.users = users; this.saveAll(); }
   public overrideSettings(settings: Partial<AppSettings>) { this.settings = { ...this.settings, ...settings }; this.saveAll(); }
-  public overrideEvents(events: Event[]) { this.events = events; this.saveAll(); }
+  public overrideEvents(events: Event[]) { 
+    this.events = events; 
+    if (events.length > 0 && !events.some(e => e.id === this.activeEventId)) {
+      this.activeEventId = events[0].id;
+    }
+    this.saveAll(); 
+  }
   public overrideCeremonies(ceremonies: Ceremony[]) { this.ceremonies = ceremonies; this.saveAll(); }
   public overrideFamilies(families: Family[]) { this.families = families; this.saveAll(); }
   public overrideGuests(guests: Guest[]) { this.guests = guests; this.saveAll(); }
@@ -332,7 +237,21 @@ class DatabaseService {
   // --- Events ---
   public getEvents(includeArchived = false): Event[] { return this.events.filter(e => includeArchived || e.status !== 'Archived'); }
   public getEventById(id: string): Event | undefined { return this.events.find(e => e.id === id); }
-  public getActiveEvent(): Event { return this.events.find(e => e.id === this.activeEventId) || this.events[0] || SEED_EVENTS[0]; }
+  public getActiveEvent(): Event { 
+    return this.events.find(e => e.id === this.activeEventId) || this.events[0] || {
+      id: 'evt-1',
+      event_code: 'EVT-001',
+      name: 'Default Shaadi',
+      type: 'Marriage',
+      date: new Date().toISOString().split('T')[0],
+      venue: 'Main Venue',
+      host_name: 'Host',
+      description: 'Event',
+      status: 'Active',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    }; 
+  }
   public setActiveEventId(id: string) {
     this.activeEventId = id;
     localStorage.setItem(STORAGE_KEYS.ACTIVE_EVENT_ID, id);
@@ -342,6 +261,7 @@ class DatabaseService {
   public addEvent(eventData: Omit<Event, 'id' | 'created_at' | 'updated_at'>): Event {
     const newEvent: Event = { ...eventData, id: 'evt-' + Date.now(), created_at: new Date().toISOString(), updated_at: new Date().toISOString() };
     this.events.unshift(newEvent);
+    this.activeEventId = newEvent.id;
     this.saveAll();
     cloudSync.pushEvent(newEvent);
     return newEvent;
@@ -358,6 +278,9 @@ class DatabaseService {
     const idx = this.events.findIndex(e => e.id === id);
     if (idx === -1) return false;
     this.events.splice(idx, 1);
+    if (this.activeEventId === id) {
+      this.activeEventId = this.events[0]?.id || '';
+    }
     this.saveAll();
     cloudSync.deleteEvent(id);
     return true;
@@ -481,6 +404,7 @@ class DatabaseService {
     const newFamily: Family = { ...familyData, id: 'fam-' + Date.now(), created_at: new Date().toISOString(), updated_at: new Date().toISOString() };
     this.families.unshift(newFamily);
     this.saveAll();
+    cloudSync.pushFamily(newFamily);
     return newFamily;
   }
   public updateFamily(id: string, updates: Partial<Family>): Family | null {
@@ -678,15 +602,15 @@ class DatabaseService {
       const parsed = JSON.parse(jsonString);
       if (!parsed.data || !Array.isArray(parsed.data.events)) throw new Error('Invalid schema');
       this.events = parsed.data.events;
-      this.ceremonies = parsed.data.ceremonies || [...SEED_CEREMONIES];
+      this.ceremonies = parsed.data.ceremonies || [];
       this.guests = parsed.data.guests;
       this.families = parsed.data.families || [];
       this.transactions = parsed.data.transactions || [];
       this.gifts = parsed.data.gifts || [];
       this.auditLogs = parsed.data.auditLogs || [];
       this.settings = parsed.data.settings || DEFAULT_SETTINGS;
-      this.activeEventId = parsed.data.activeEventId || 'evt-1';
-      this.activeCeremonyId = parsed.data.activeCeremonyId || 'crm-1-3';
+      this.activeEventId = parsed.data.activeEventId || '';
+      this.activeCeremonyId = parsed.data.activeCeremonyId || '';
       if (parsed.data.users) this.users = parsed.data.users;
       this.saveAll();
       return true;
