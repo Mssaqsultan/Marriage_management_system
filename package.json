@@ -6,15 +6,10 @@
   "scripts": {
     "dev": "vite",
     "whatsapp-server": "node server/whatsapp-gateway.js",
-    "build": "tsc && vite build",
+    "build": "npx tsc && vite build",
     "preview": "vite preview"
   },
   {
-  "scripts": {
-    "build": "tsc && vite build",
-    "dev": "vite",
-    "preview": "vite preview"
-  }
 }
   
   "dependencies": {
