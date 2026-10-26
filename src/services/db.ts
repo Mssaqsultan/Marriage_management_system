@@ -143,58 +143,6 @@ const SEED_FAMILIES: Family[] = [
     notes: 'Primary Host Family for Sultan Ki Shaadi',
     created_at: '2026-09-01T10:00:00.000Z',
     updated_at: '2026-09-01T10:00:00.000Z'
-  },
-  {
-    id: 'fam-2',
-    name: 'Siddiqui Family',
-    head_guest_id: 'gst-2',
-    address: 'Near Shahi Masjid, Ward 4',
-    village: 'Rampur',
-    district: 'Rampur',
-    state: 'Uttar Pradesh',
-    mobile: '9812345678',
-    notes: 'Primary Host Family for Rizwan Ki Shaadi',
-    created_at: '2026-09-01T10:00:00.000Z',
-    updated_at: '2026-09-01T10:00:00.000Z'
-  },
-  {
-    id: 'fam-3',
-    name: 'Rashid Khan Household',
-    head_guest_id: 'gst-3',
-    address: 'Kisan Marg, Sector 2',
-    village: 'Chauriya khas',
-    district: 'Lucknow',
-    state: 'Uttar Pradesh',
-    mobile: '9834567890',
-    notes: 'Mama side family with historical connections',
-    created_at: '2026-09-01T10:00:00.000Z',
-    updated_at: '2026-09-01T10:00:00.000Z'
-  },
-  {
-    id: 'fam-4',
-    name: 'Haji Qureshi Family',
-    head_guest_id: 'gst-5',
-    address: 'Gomti Nagar Extension, Plot 12',
-    village: 'Lucknow',
-    district: 'Lucknow',
-    state: 'Uttar Pradesh',
-    mobile: '9712345678',
-    notes: 'Bride side close elders',
-    created_at: '2026-09-01T10:00:00.000Z',
-    updated_at: '2026-09-01T10:00:00.000Z'
-  },
-  {
-    id: 'fam-5',
-    name: 'Ansari & Sons Family',
-    head_guest_id: 'gst-6',
-    address: 'Bunkar Colony, Civil Lines',
-    village: 'Azamgarh',
-    district: 'Azamgarh',
-    state: 'Uttar Pradesh',
-    mobile: '9612345678',
-    notes: 'Respected maternal branch',
-    created_at: '2026-09-01T10:00:00.000Z',
-    updated_at: '2026-09-01T10:00:00.000Z'
   }
 ];
 
@@ -205,7 +153,6 @@ const SEED_GUESTS: Guest[] = [
     name: 'Sultan Salahuddin',
     father_husband_name: 'Haji Iqbal Khan',
     mobile: '9876543210',
-    alternate_mobile: '9876543211',
     address: 'Royal Haveli, Station Road',
     village: 'Chauriya khas',
     post: 'Chauriya khas',
@@ -214,173 +161,11 @@ const SEED_GUESTS: Guest[] = [
     pincode: '226001',
     relation: 'Brother',
     side: 'Host Side',
-    notes: 'Chief Host & Groom (Sultan Ki Shaadi)',
-    created_at: '2026-09-01T10:00:00.000Z',
-    updated_at: '2026-09-01T10:00:00.000Z'
-  },
-  {
-    id: 'gst-2',
-    family_id: 'fam-2',
-    name: 'Mukhtar Ahmad Siddiqui',
-    father_husband_name: 'Janab Asghar Siddiqui',
-    mobile: '9812345678',
-    alternate_mobile: '9812345679',
-    address: 'Ward 4, Near Shahi Masjid',
-    village: 'Rampur',
-    post: 'Rampur City',
-    district: 'Rampur',
-    state: 'Uttar Pradesh',
-    pincode: '244901',
-    relation: 'Brother',
-    side: 'Host Side',
-    notes: 'Chief Host (Rizwan Ki Shaadi)',
-    created_at: '2026-09-01T10:00:00.000Z',
-    updated_at: '2026-09-01T10:00:00.000Z'
-  },
-  {
-    id: 'gst-3',
-    family_id: 'fam-3',
-    name: 'Rashid Khan',
-    father_husband_name: 'Janab Afzal Khan',
-    mobile: '9834567890',
-    alternate_mobile: '9834567899',
-    address: 'Kisan Marg, Sector 2',
-    village: 'Chauriya khas',
-    post: 'Chauriya khas',
-    district: 'Lucknow',
-    state: 'Uttar Pradesh',
-    pincode: '226001',
-    relation: 'Mama',
-    side: 'Groom Side',
-    notes: 'Arrived with entire family; prestigious elder',
-    created_at: '2026-09-01T10:00:00.000Z',
-    updated_at: '2026-09-01T10:00:00.000Z'
-  },
-  {
-    id: 'gst-4',
-    family_id: 'fam-3',
-    name: 'Bilal Khan',
-    father_husband_name: 'Rashid Khan',
-    mobile: '9834567891',
-    village: 'Chauriya khas',
-    district: 'Lucknow',
-    state: 'Uttar Pradesh',
-    relation: 'Cousin',
-    side: 'Groom Side',
-    notes: "Rashid Khan's eldest son",
-    created_at: '2026-09-01T10:00:00.000Z',
-    updated_at: '2026-09-01T10:00:00.000Z'
-  },
-  {
-    id: 'gst-5',
-    family_id: 'fam-4',
-    name: 'Maqbool Qureshi',
-    father_husband_name: 'Haji Mushtaq Qureshi',
-    mobile: '9712345678',
-    address: 'Gomti Nagar Extension, Plot 12',
-    village: 'Lucknow',
-    district: 'Lucknow',
-    state: 'Uttar Pradesh',
-    pincode: '226010',
-    relation: 'Chacha',
-    side: 'Bride Side',
-    notes: 'Respected elder & teacher',
-    created_at: '2026-09-01T10:00:00.000Z',
-    updated_at: '2026-09-01T10:00:00.000Z'
-  },
-  {
-    id: 'gst-6',
-    family_id: 'fam-5',
-    name: 'Tariq Ansari',
-    father_husband_name: 'Haji Bashir Ansari',
-    mobile: '9612345678',
-    address: 'Bunkar Colony',
-    village: 'Azamgarh',
-    district: 'Azamgarh',
-    state: 'Uttar Pradesh',
-    pincode: '276001',
-    relation: 'Mama',
-    side: 'Bride Side',
-    notes: 'Handloom textile merchant',
-    created_at: '2026-09-01T10:00:00.000Z',
-    updated_at: '2026-09-01T10:00:00.000Z'
-  },
-  {
-    id: 'gst-7',
-    name: 'Danish Ali',
-    father_husband_name: 'Zahid Ali',
-    mobile: '9512345678',
-    village: 'Delhi',
-    district: 'South Delhi',
-    state: 'Delhi',
-    pincode: '110025',
-    relation: 'Friend',
-    side: 'Groom Side',
-    notes: 'College friend of Sultan',
-    created_at: '2026-09-01T10:00:00.000Z',
-    updated_at: '2026-09-01T10:00:00.000Z'
-  },
-  {
-    id: 'gst-8',
-    name: 'Farhan Khan',
-    father_husband_name: 'Nawab Aslam Khan',
-    mobile: '9412345678',
-    village: 'Rampur',
-    district: 'Rampur',
-    state: 'Uttar Pradesh',
-    relation: 'Fufa',
-    side: 'Host Side',
-    notes: 'Arrived early to help coordinate arrangements',
-    created_at: '2026-09-01T10:00:00.000Z',
-    updated_at: '2026-09-01T10:00:00.000Z'
-  },
-  {
-    id: 'gst-9',
-    name: 'Salman Sheikh',
-    father_husband_name: 'Kareem Sheikh',
-    mobile: '9312345678',
-    village: 'Kanpur',
-    district: 'Kanpur Nagar',
-    state: 'Uttar Pradesh',
-    relation: 'Business Partner',
-    side: 'Bride Side',
-    notes: 'Industrialist colleague',
-    created_at: '2026-09-01T10:00:00.000Z',
-    updated_at: '2026-09-01T10:00:00.000Z'
-  },
-  {
-    id: 'gst-10',
-    name: 'Imran Malik',
-    father_husband_name: 'Subedar Jameel Malik',
-    mobile: '9212345678',
-    village: 'Chauriya khas',
-    district: 'Lucknow',
-    state: 'Uttar Pradesh',
-    relation: 'Neighbor',
-    side: 'Groom Side',
-    notes: 'Respected village elder neighbor',
-    created_at: '2026-09-01T10:00:00.000Z',
-    updated_at: '2026-09-01T10:00:00.000Z'
-  },
-  {
-    id: 'gst-11',
-    name: 'Fatima Bibi',
-    father_husband_name: 'Syed Anwar',
-    mobile: '9112345678',
-    village: 'Lucknow',
-    district: 'Lucknow',
-    state: 'Uttar Pradesh',
-    relation: 'Mami',
-    side: 'Bride Side',
-    notes: 'Elder aunt',
+    notes: 'Chief Host & Groom',
     created_at: '2026-09-01T10:00:00.000Z',
     updated_at: '2026-09-01T10:00:00.000Z'
   }
 ];
-
-const SEED_TRANSACTIONS: Transaction[] = [];
-const SEED_GIFTS: Gift[] = [];
-const SEED_AUDIT_LOGS: AuditLog[] = [];
 
 class DatabaseService {
   private events: Event[] = [];
@@ -405,78 +190,43 @@ class DatabaseService {
 
   private loadFromStorage() {
     try {
-      const storedEvents = localStorage.getItem(STORAGE_KEYS.EVENTS);
-      const storedEventTypes = localStorage.getItem(STORAGE_KEYS.EVENT_TYPES);
-      const storedCeremonies = localStorage.getItem(STORAGE_KEYS.CEREMONIES);
-      const storedGuests = localStorage.getItem(STORAGE_KEYS.GUESTS);
-      const storedFamilies = localStorage.getItem(STORAGE_KEYS.FAMILIES);
-      const storedTransactions = localStorage.getItem(STORAGE_KEYS.TRANSACTIONS);
-      const storedGifts = localStorage.getItem(STORAGE_KEYS.GIFTS);
-      const storedAuditLogs = localStorage.getItem(STORAGE_KEYS.AUDIT_LOGS);
-      const storedSettings = localStorage.getItem(STORAGE_KEYS.SETTINGS);
-      const storedActiveEventId = localStorage.getItem(STORAGE_KEYS.ACTIVE_EVENT_ID);
-      const storedActiveCeremonyId = localStorage.getItem(STORAGE_KEYS.ACTIVE_CEREMONY_ID);
-      const storedUsers = localStorage.getItem(STORAGE_KEYS.USERS);
-      const storedCurrentUser = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
-
-      this.events = storedEvents ? JSON.parse(storedEvents) : [...SEED_EVENTS];
-      this.eventTypes = storedEventTypes ? JSON.parse(storedEventTypes) : [...DEFAULT_EVENT_TYPES];
-      this.ceremonies = storedCeremonies ? JSON.parse(storedCeremonies) : [...SEED_CEREMONIES];
-      this.guests = storedGuests ? JSON.parse(storedGuests) : [...SEED_GUESTS];
-      this.families = storedFamilies ? JSON.parse(storedFamilies) : [...SEED_FAMILIES];
-      this.transactions = storedTransactions ? JSON.parse(storedTransactions) : [...SEED_TRANSACTIONS];
-      this.gifts = storedGifts ? JSON.parse(storedGifts) : [...SEED_GIFTS];
-      this.auditLogs = storedAuditLogs ? JSON.parse(storedAuditLogs) : [...SEED_AUDIT_LOGS];
-      this.settings = storedSettings ? { ...DEFAULT_SETTINGS, ...JSON.parse(storedSettings) } : { ...DEFAULT_SETTINGS };
-      this.activeEventId = storedActiveEventId || 'evt-1';
-      this.activeCeremonyId = storedActiveCeremonyId || 'crm-1-3';
-      this.users = storedUsers ? JSON.parse(storedUsers) : [...SEED_USERS];
-      this.currentUser = storedCurrentUser ? JSON.parse(storedCurrentUser) : null;
-      const storedReturnGifts = localStorage.getItem(STORAGE_KEYS.RETURN_GIFTS);
-      this.returnGifts = storedReturnGifts ? JSON.parse(storedReturnGifts) : [];
-
-      if (!storedEvents) {
-        this.saveAll();
-      }
+      this.events = JSON.parse(localStorage.getItem(STORAGE_KEYS.EVENTS) || 'null') || [...SEED_EVENTS];
+      this.eventTypes = JSON.parse(localStorage.getItem(STORAGE_KEYS.EVENT_TYPES) || 'null') || [...DEFAULT_EVENT_TYPES];
+      this.ceremonies = JSON.parse(localStorage.getItem(STORAGE_KEYS.CEREMONIES) || 'null') || [...SEED_CEREMONIES];
+      this.guests = JSON.parse(localStorage.getItem(STORAGE_KEYS.GUESTS) || 'null') || [...SEED_GUESTS];
+      this.families = JSON.parse(localStorage.getItem(STORAGE_KEYS.FAMILIES) || 'null') || [...SEED_FAMILIES];
+      this.transactions = JSON.parse(localStorage.getItem(STORAGE_KEYS.TRANSACTIONS) || 'null') || [];
+      this.gifts = JSON.parse(localStorage.getItem(STORAGE_KEYS.GIFTS) || 'null') || [];
+      this.auditLogs = JSON.parse(localStorage.getItem(STORAGE_KEYS.AUDIT_LOGS) || 'null') || [];
+      this.settings = { ...DEFAULT_SETTINGS, ...JSON.parse(localStorage.getItem(STORAGE_KEYS.SETTINGS) || '{}') };
+      this.activeEventId = localStorage.getItem(STORAGE_KEYS.ACTIVE_EVENT_ID) || 'evt-1';
+      this.activeCeremonyId = localStorage.getItem(STORAGE_KEYS.ACTIVE_CEREMONY_ID) || 'crm-1-3';
+      this.users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || 'null') || [...SEED_USERS];
+      this.currentUser = JSON.parse(localStorage.getItem(STORAGE_KEYS.CURRENT_USER) || 'null');
+      this.returnGifts = JSON.parse(localStorage.getItem(STORAGE_KEYS.RETURN_GIFTS) || 'null') || [];
     } catch (e) {
-      console.error('Error loading data from localStorage, falling back to defaults', e);
+      console.error('Error loading data, falling back to defaults', e);
       this.resetToDefaults();
     }
   }
 
-  // --- Cloud Sync Initialization ---
   private async initCloudSync() {
     try {
-      const cloudData = await cloudSync.fetchAllData();
-      if (cloudData) {
-        if (cloudData.events && cloudData.events.length > 0) {
-          this.overrideEvents(cloudData.events);
+      if (typeof (cloudSync as any).fetchAllData === 'function') {
+        const cloudData = await (cloudSync as any).fetchAllData();
+        if (cloudData) {
+          if (cloudData.events?.length) this.overrideEvents(cloudData.events);
+          if (cloudData.ceremonies?.length) this.overrideCeremonies(cloudData.ceremonies);
+          if (cloudData.guests?.length) this.overrideGuests(cloudData.guests);
+          if (cloudData.families?.length) this.overrideFamilies(cloudData.families);
+          if (cloudData.transactions?.length) this.overrideTransactions(cloudData.transactions);
+          if (cloudData.gifts?.length) this.overrideGifts(cloudData.gifts);
+          if (cloudData.users?.length) this.overrideUsers(cloudData.users);
+          if (cloudData.settings) this.overrideSettings(cloudData.settings);
         }
-        if (cloudData.ceremonies && cloudData.ceremonies.length > 0) {
-          this.overrideCeremonies(cloudData.ceremonies);
-        }
-        if (cloudData.guests && cloudData.guests.length > 0) {
-          this.overrideGuests(cloudData.guests);
-        }
-        if (cloudData.families && cloudData.families.length > 0) {
-          this.overrideFamilies(cloudData.families);
-        }
-        if (cloudData.transactions && cloudData.transactions.length > 0) {
-          this.overrideTransactions(cloudData.transactions);
-        }
-        if (cloudData.gifts && cloudData.gifts.length > 0) {
-          this.overrideGifts(cloudData.gifts);
-        }
-        if (cloudData.users && cloudData.users.length > 0) {
-          this.overrideUsers(cloudData.users);
-        }
-        if (cloudData.settings) {
-          this.overrideSettings(cloudData.settings);
-        }
-        console.log('Successfully synced data from Supabase Cloud!');
       }
     } catch (err) {
-      console.warn('Cloud sync offline or failed, using local storage cache:', err);
+      console.warn('Cloud sync offline or failed:', err);
     }
   }
 
@@ -498,6 +248,7 @@ class DatabaseService {
     } else {
       localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
     }
+    localStorage.setItem(STORAGE_KEYS.RETURN_GIFTS, JSON.stringify(this.returnGifts));
   }
 
   public resetToDefaults() {
@@ -506,202 +257,113 @@ class DatabaseService {
     this.ceremonies = [...SEED_CEREMONIES];
     this.guests = [...SEED_GUESTS];
     this.families = [...SEED_FAMILIES];
-    this.transactions = [...SEED_TRANSACTIONS];
-    this.gifts = [...SEED_GIFTS];
-    this.auditLogs = [...SEED_AUDIT_LOGS];
+    this.transactions = [];
+    this.gifts = [];
+    this.auditLogs = [];
     this.settings = { ...DEFAULT_SETTINGS };
     this.activeEventId = 'evt-1';
     this.activeCeremonyId = 'crm-1-3';
     this.users = [...SEED_USERS];
+    this.returnGifts = [];
     this.saveAll();
-    this.logAudit('System', 'sys-reset', 'RESTORE', 'Reset database to seed dataset');
   }
 
   // --- Auth & Users ---
-  public getUsers(): User[] {
-    return [...this.users];
-  }
-
-  public getCurrentUser(): User | null {
-    return this.currentUser;
-  }
-
+  public getUsers(): User[] { return [...this.users]; }
+  public getCurrentUser(): User | null { return this.currentUser; }
   public setCurrentUser(user: User | null) {
     this.currentUser = user;
-    if (user) {
-      localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(user));
-    } else {
-      localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
-    }
+    if (user) localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(user));
+    else localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
   }
-
   public login(username: string, password?: string): User | null {
     const cleanUser = username.trim().toLowerCase();
     const user = this.users.find(u => u.username.toLowerCase() === cleanUser);
-    if (!user) return null;
-    if (password && user.password && user.password !== password) return null;
+    if (!user || (password && user.password && user.password !== password)) return null;
     this.setCurrentUser(user);
     return user;
   }
-
-  public logout() {
-    this.setCurrentUser(null);
-  }
-
+  public logout() { this.setCurrentUser(null); }
   public addUser(userData: Omit<User, 'id' | 'created_at'>): User {
-    const newUser: User = {
-      ...userData,
-      id: 'usr-' + Date.now(),
-      created_at: new Date().toISOString()
-    };
+    const newUser: User = { ...userData, id: 'usr-' + Date.now(), created_at: new Date().toISOString() };
     this.users.push(newUser);
-    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(this.users));
+    this.saveAll();
     cloudSync.pushUser(newUser);
     return newUser;
   }
-
   public deleteUser(id: string): boolean {
     const idx = this.users.findIndex(u => u.id === id);
     if (idx === -1) return false;
     this.users.splice(idx, 1);
-    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(this.users));
+    this.saveAll();
     cloudSync.deleteUser(id);
     return true;
   }
-
   public updateUserPassword(id: string, newPassword: string): boolean {
     const idx = this.users.findIndex(u => u.id === id);
     if (idx === -1) return false;
     this.users[idx] = { ...this.users[idx], password: newPassword };
-    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(this.users));
-    if (this.currentUser && this.currentUser.id === id) {
-      this.currentUser = { ...this.users[idx] };
-      localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(this.currentUser));
-    }
+    this.saveAll();
     cloudSync.pushUser(this.users[idx]);
     return true;
   }
 
-  // --- Audit Logging ---
-  public logAudit(
-    entity_type: AuditLog['entity_type'],
-    entity_id: string,
-    action: AuditLog['action'],
-    details: string,
-    old_data?: any,
-    new_data?: any
-  ) {
+  // --- Audit & Settings ---
+  public logAudit(entity_type: AuditLog['entity_type'], entity_id: string, action: AuditLog['action'], details: string) {
     const log: AuditLog = {
       id: 'aud-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4),
       user_name: this.currentUser?.name || this.settings.operator_name || 'Sultan',
-      entity_type,
-      entity_id,
-      action,
-      details,
+      entity_type, entity_id, action, details,
       timestamp: new Date().toISOString()
     };
     this.auditLogs.unshift(log);
     if (this.auditLogs.length > 500) this.auditLogs.pop();
     localStorage.setItem(STORAGE_KEYS.AUDIT_LOGS, JSON.stringify(this.auditLogs));
   }
-
-  // --- Settings ---
-  public getSettings(): AppSettings {
-    return { ...this.settings };
-  }
-
+  public getAuditLogs(): AuditLog[] { return [...this.auditLogs]; }
+  public getSettings(): AppSettings { return { ...this.settings }; }
   public updateSettings(newSettings: Partial<AppSettings>): AppSettings {
     this.settings = { ...this.settings, ...newSettings };
-    localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(this.settings));
+    this.saveAll();
     cloudSync.pushSettings(this.settings);
     return this.settings;
   }
 
-  // --- Cloud Sync Overrides ---
-  public overrideUsers(users: User[]) {
-    this.users = users;
-    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(this.users));
-  }
-
-  public overrideSettings(settings: Partial<AppSettings>) {
-    this.settings = { ...this.settings, ...settings };
-    localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(this.settings));
-  }
-
-  public overrideEvents(events: Event[]) {
-    this.events = events;
-    localStorage.setItem(STORAGE_KEYS.EVENTS, JSON.stringify(events));
-  }
-
-  public overrideCeremonies(ceremonies: Ceremony[]) {
-    this.ceremonies = ceremonies;
-    localStorage.setItem(STORAGE_KEYS.CEREMONIES, JSON.stringify(ceremonies));
-  }
-
-  public overrideFamilies(families: Family[]) {
-    this.families = families;
-    localStorage.setItem(STORAGE_KEYS.FAMILIES, JSON.stringify(families));
-  }
-
-  public overrideGuests(guests: Guest[]) {
-    this.guests = guests;
-    localStorage.setItem(STORAGE_KEYS.GUESTS, JSON.stringify(guests));
-  }
-
-  public overrideTransactions(transactions: Transaction[]) {
-    this.transactions = transactions;
-    localStorage.setItem(STORAGE_KEYS.TRANSACTIONS, JSON.stringify(transactions));
-  }
-
-  public overrideGifts(gifts: Gift[]) {
-    this.gifts = gifts;
-    localStorage.setItem(STORAGE_KEYS.GIFTS, JSON.stringify(gifts));
-  }
+  // --- Overrides ---
+  public overrideUsers(users: User[]) { this.users = users; this.saveAll(); }
+  public overrideSettings(settings: Partial<AppSettings>) { this.settings = { ...this.settings, ...settings }; this.saveAll(); }
+  public overrideEvents(events: Event[]) { this.events = events; this.saveAll(); }
+  public overrideCeremonies(ceremonies: Ceremony[]) { this.ceremonies = ceremonies; this.saveAll(); }
+  public overrideFamilies(families: Family[]) { this.families = families; this.saveAll(); }
+  public overrideGuests(guests: Guest[]) { this.guests = guests; this.saveAll(); }
+  public overrideTransactions(transactions: Transaction[]) { this.transactions = transactions; this.saveAll(); }
+  public overrideGifts(gifts: Gift[]) { this.gifts = gifts; this.saveAll(); }
 
   // --- Events ---
-  public getEvents(includeArchived = false): Event[] {
-    return this.events.filter(e => includeArchived || e.status !== 'Archived');
-  }
-
-  public getEventById(id: string): Event | undefined {
-    return this.events.find(e => e.id === id);
-  }
-
-  public getActiveEvent(): Event {
-    return this.events.find(e => e.id === this.activeEventId) || this.events[0] || SEED_EVENTS[0];
-  }
-
+  public getEvents(includeArchived = false): Event[] { return this.events.filter(e => includeArchived || e.status !== 'Archived'); }
+  public getEventById(id: string): Event | undefined { return this.events.find(e => e.id === id); }
+  public getActiveEvent(): Event { return this.events.find(e => e.id === this.activeEventId) || this.events[0] || SEED_EVENTS[0]; }
   public setActiveEventId(id: string) {
     this.activeEventId = id;
     localStorage.setItem(STORAGE_KEYS.ACTIVE_EVENT_ID, id);
     const eventCeremonies = this.getCeremonies(id);
-    if (eventCeremonies.length > 0) {
-      this.setActiveCeremonyId(eventCeremonies[0].id);
-    }
+    if (eventCeremonies.length > 0) this.setActiveCeremonyId(eventCeremonies[0].id);
   }
-
   public addEvent(eventData: Omit<Event, 'id' | 'created_at' | 'updated_at'>): Event {
-    const newEvent: Event = {
-      ...eventData,
-      id: 'evt-' + Date.now(),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    };
+    const newEvent: Event = { ...eventData, id: 'evt-' + Date.now(), created_at: new Date().toISOString(), updated_at: new Date().toISOString() };
     this.events.unshift(newEvent);
-    localStorage.setItem(STORAGE_KEYS.EVENTS, JSON.stringify(this.events));
+    this.saveAll();
     cloudSync.pushEvent(newEvent);
     return newEvent;
   }
-
   public updateEvent(id: string, updates: Partial<Event>): Event | null {
     const idx = this.events.findIndex(e => e.id === id);
     if (idx === -1) return null;
     this.events[idx] = { ...this.events[idx], ...updates, updated_at: new Date().toISOString() };
-    localStorage.setItem(STORAGE_KEYS.EVENTS, JSON.stringify(this.events));
+    this.saveAll();
     cloudSync.pushEvent(this.events[idx]);
     return this.events[idx];
   }
-
   public deleteEvent(id: string): boolean {
     const idx = this.events.findIndex(e => e.id === id);
     if (idx === -1) return false;
@@ -712,10 +374,7 @@ class DatabaseService {
   }
 
   // --- Event Types ---
-  public getEventTypes(): string[] {
-    return [...this.eventTypes];
-  }
-
+  public getEventTypes(): string[] { return [...this.eventTypes]; }
   public addEventType(name: string): string[] {
     const trimmed = name.trim();
     if (trimmed && !this.eventTypes.includes(trimmed)) {
@@ -724,115 +383,97 @@ class DatabaseService {
     }
     return [...this.eventTypes];
   }
+  public deleteEventType(name: string): string[] {
+    if (this.eventTypes.length <= 1) return [...this.eventTypes];
+    this.eventTypes = this.eventTypes.filter(t => t !== name);
+    localStorage.setItem(STORAGE_KEYS.EVENT_TYPES, JSON.stringify(this.eventTypes));
+    return [...this.eventTypes];
+  }
 
   // --- Ceremonies ---
   public getCeremonies(eventId?: string): Ceremony[] {
     if (eventId) return this.ceremonies.filter(c => c.event_id === eventId);
     return [...this.ceremonies];
   }
-
-  public getCeremonyById(id: string): Ceremony | undefined {
-    return this.ceremonies.find(c => c.id === id);
-  }
-
+  public getCeremonyById(id: string): Ceremony | undefined { return this.ceremonies.find(c => c.id === id); }
   public getActiveCeremony(): Ceremony | undefined {
     return this.ceremonies.find(c => c.id === this.activeCeremonyId && c.event_id === this.activeEventId) || this.getCeremonies(this.activeEventId)[0];
   }
-
-  public getActiveCeremonyId(): string {
-    return this.activeCeremonyId;
-  }
-
+  public getActiveCeremonyId(): string { return this.activeCeremonyId; }
   public setActiveCeremonyId(id: string) {
     this.activeCeremonyId = id;
     localStorage.setItem(STORAGE_KEYS.ACTIVE_CEREMONY_ID, id);
   }
-
   public addCeremony(ceremonyData: Omit<Ceremony, 'id' | 'created_at' | 'updated_at'>): Ceremony {
-    const newCeremony: Ceremony = {
-      ...ceremonyData,
-      id: 'crm-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    };
+    const newCeremony: Ceremony = { ...ceremonyData, id: 'crm-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4), created_at: new Date().toISOString(), updated_at: new Date().toISOString() };
     this.ceremonies.push(newCeremony);
-    localStorage.setItem(STORAGE_KEYS.CEREMONIES, JSON.stringify(this.ceremonies));
+    this.saveAll();
     cloudSync.pushCeremony(newCeremony);
     return newCeremony;
   }
-
   public updateCeremony(id: string, updates: Partial<Ceremony>): Ceremony | null {
     const idx = this.ceremonies.findIndex(c => c.id === id);
     if (idx === -1) return null;
     this.ceremonies[idx] = { ...this.ceremonies[idx], ...updates, updated_at: new Date().toISOString() };
-    localStorage.setItem(STORAGE_KEYS.CEREMONIES, JSON.stringify(this.ceremonies));
+    this.saveAll();
     cloudSync.pushCeremony(this.ceremonies[idx]);
     return this.ceremonies[idx];
   }
-
   public deleteCeremony(id: string): boolean {
     const idx = this.ceremonies.findIndex(c => c.id === id);
     if (idx === -1) return false;
     this.ceremonies.splice(idx, 1);
-    localStorage.setItem(STORAGE_KEYS.CEREMONIES, JSON.stringify(this.ceremonies));
+    this.saveAll();
     cloudSync.deleteCeremony(id);
     return true;
   }
 
   // --- Guests ---
-  public getGuests(includeDeleted = false): Guest[] {
-    return this.guests.filter(g => includeDeleted || !g.deleted_at);
-  }
-
-  public getGuestById(id: string): Guest | undefined {
-    return this.guests.find(g => g.id === id);
-  }
-
+  public getGuests(includeDeleted = false): Guest[] { return this.guests.filter(g => includeDeleted || !g.deleted_at); }
+  public getGuestById(id: string): Guest | undefined { return this.guests.find(g => g.id === id); }
   public addGuest(guestData: Omit<Guest, 'id' | 'created_at' | 'updated_at'>): Guest {
-    const newGuest: Guest = {
-      ...guestData,
-      id: 'gst-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    };
+    const newGuest: Guest = { ...guestData, id: 'gst-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4), created_at: new Date().toISOString(), updated_at: new Date().toISOString() };
     this.guests.unshift(newGuest);
-    localStorage.setItem(STORAGE_KEYS.GUESTS, JSON.stringify(this.guests));
+    this.saveAll();
     cloudSync.pushGuest(newGuest);
     return newGuest;
   }
-
   public updateGuest(id: string, updates: Partial<Guest>): Guest | null {
     const idx = this.guests.findIndex(g => g.id === id);
     if (idx === -1) return null;
     this.guests[idx] = { ...this.guests[idx], ...updates, updated_at: new Date().toISOString() };
-    localStorage.setItem(STORAGE_KEYS.GUESTS, JSON.stringify(this.guests));
+    this.saveAll();
     cloudSync.pushGuest(this.guests[idx]);
     return this.guests[idx];
   }
-
   public softDeleteGuest(id: string): boolean {
     const guest = this.guests.find(g => g.id === id);
     if (!guest) return false;
     guest.deleted_at = new Date().toISOString();
-    localStorage.setItem(STORAGE_KEYS.GUESTS, JSON.stringify(this.guests));
+    this.saveAll();
     cloudSync.pushGuest(guest);
     return true;
   }
-
+  public restoreGuest(id: string): boolean {
+    const guest = this.guests.find(g => g.id === id);
+    if (!guest) return false;
+    guest.deleted_at = null;
+    this.saveAll();
+    cloudSync.pushGuest(guest);
+    return true;
+  }
   public permanentDeleteGuest(id: string): boolean {
     const idx = this.guests.findIndex(g => g.id === id);
     if (idx === -1) return false;
     this.guests.splice(idx, 1);
-    localStorage.setItem(STORAGE_KEYS.GUESTS, JSON.stringify(this.guests));
+    this.saveAll();
     cloudSync.deleteGuestPermanent(id);
     return true;
   }
-
   public checkDuplicates(name: string, mobile?: string, village?: string): Guest[] {
     const cleanName = name.trim().toLowerCase();
     const cleanMobile = mobile ? mobile.replace(/\D/g, '') : '';
     const cleanVillage = village ? village.trim().toLowerCase() : '';
-
     return this.guests.filter(g => {
       if (g.deleted_at) return false;
       if (cleanMobile && g.mobile && g.mobile.replace(/\D/g, '') === cleanMobile) return true;
@@ -845,30 +486,28 @@ class DatabaseService {
   }
 
   // --- Families ---
-  public getFamilies(): Family[] {
-    return [...this.families];
-  }
-
+  public getFamilies(): Family[] { return [...this.families]; }
   public addFamily(familyData: Omit<Family, 'id' | 'created_at' | 'updated_at'>): Family {
-    const newFamily: Family = {
-      ...familyData,
-      id: 'fam-' + Date.now(),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    };
+    const newFamily: Family = { ...familyData, id: 'fam-' + Date.now(), created_at: new Date().toISOString(), updated_at: new Date().toISOString() };
     this.families.unshift(newFamily);
-    localStorage.setItem(STORAGE_KEYS.FAMILIES, JSON.stringify(this.families));
-    cloudSync.pushFamily(newFamily);
+    this.saveAll();
     return newFamily;
   }
-
   public updateFamily(id: string, updates: Partial<Family>): Family | null {
     const idx = this.families.findIndex(f => f.id === id);
     if (idx === -1) return null;
     this.families[idx] = { ...this.families[idx], ...updates, updated_at: new Date().toISOString() };
-    localStorage.setItem(STORAGE_KEYS.FAMILIES, JSON.stringify(this.families));
+    this.saveAll();
     cloudSync.pushFamily(this.families[idx]);
     return this.families[idx];
+  }
+  public deleteFamily(id: string): boolean {
+    const idx = this.families.findIndex(f => f.id === id);
+    if (idx === -1) return false;
+    this.families.splice(idx, 1);
+    this.saveAll();
+    cloudSync.deleteFamily(id);
+    return true;
   }
 
   // --- Transactions & Gifts ---
@@ -880,7 +519,6 @@ class DatabaseService {
       return true;
     });
   }
-
   public addTransaction(txnData: Omit<Transaction, 'id' | 'created_at' | 'updated_at'>): Transaction {
     const newTxn: Transaction = {
       ...txnData,
@@ -891,11 +529,10 @@ class DatabaseService {
       updated_at: new Date().toISOString()
     };
     this.transactions.unshift(newTxn);
-    localStorage.setItem(STORAGE_KEYS.TRANSACTIONS, JSON.stringify(this.transactions));
+    this.saveAll();
     cloudSync.pushTransaction(newTxn);
     return newTxn;
   }
-
   public getGifts(eventId?: string, ceremonyId?: string, includeDeleted = false): Gift[] {
     return this.gifts.filter(g => {
       if (!includeDeleted && g.deleted_at) return false;
@@ -904,7 +541,6 @@ class DatabaseService {
       return true;
     });
   }
-
   public addGift(giftData: Omit<Gift, 'id' | 'created_at' | 'updated_at'>): Gift {
     const newGift: Gift = {
       ...giftData,
@@ -914,30 +550,163 @@ class DatabaseService {
       updated_at: new Date().toISOString()
     };
     this.gifts.unshift(newGift);
-    localStorage.setItem(STORAGE_KEYS.GIFTS, JSON.stringify(this.gifts));
+    this.saveAll();
     cloudSync.pushGift(newGift);
     return newGift;
   }
-
   public deleteTransaction(id: string): boolean {
     const idx = this.transactions.findIndex(t => t.id === id);
     if (idx === -1) return false;
     this.transactions[idx].deleted_at = new Date().toISOString();
-    localStorage.setItem(STORAGE_KEYS.TRANSACTIONS, JSON.stringify(this.transactions));
+    this.saveAll();
     cloudSync.pushTransaction(this.transactions[idx]);
     return true;
   }
-
   public deleteGift(id: string): boolean {
     const idx = this.gifts.findIndex(g => g.id === id);
     if (idx === -1) return false;
     this.gifts[idx].deleted_at = new Date().toISOString();
-    localStorage.setItem(STORAGE_KEYS.GIFTS, JSON.stringify(this.gifts));
+    this.saveAll();
     cloudSync.pushGift(this.gifts[idx]);
     return true;
   }
 
-  // --- Analytics ---
+  // --- Guest History Summary ---
+  public getGuestLifetimeHistory(guestId: string): GuestHistorySummary | null {
+    const guest = this.getGuestById(guestId);
+    if (!guest) return null;
+    const family = guest.family_id ? this.families.find(f => f.id === guest.family_id) : undefined;
+    const allEvents = this.getEvents(true);
+
+    let lifetimeNevta = 0;
+    let lifetimeNahuchua = 0;
+    let lifetimeGiftsCount = 0;
+    let lifetimeGiftValue = 0;
+
+    const eventsParticipation = allEvents.map(event => {
+      const eventTxns = this.transactions.filter(t => t.event_id === event.id && t.guest_id === guestId && !t.deleted_at);
+      const eventGifts = this.gifts.filter(g => g.event_id === event.id && g.guest_id === guestId && !g.deleted_at);
+      const nevtaAmount = eventTxns.filter(t => t.type === 'nevta').reduce((sum, t) => sum + t.amount, 0);
+      const nahuchuaAmount = eventTxns.filter(t => t.type === 'nahuchua').reduce((sum, t) => sum + t.amount, 0);
+      const giftValue = eventGifts.reduce((sum, g) => sum + (g.estimated_value * g.quantity), 0);
+
+      lifetimeNevta += nevtaAmount;
+      lifetimeNahuchua += nahuchuaAmount;
+      lifetimeGiftsCount += eventGifts.reduce((sum, g) => sum + g.quantity, 0);
+      lifetimeGiftValue += giftValue;
+
+      return {
+        event,
+        nevtaAmount,
+        nahuchuaAmount,
+        gifts: eventGifts,
+        totalAmount: nevtaAmount + nahuchuaAmount,
+        transactions: eventTxns
+      };
+    }).filter(p => p.totalAmount > 0 || p.gifts.length > 0 || p.event.id === this.activeEventId);
+
+    return {
+      guest,
+      family,
+      eventsParticipation,
+      lifetimeNevta,
+      lifetimeNahuchua,
+      lifetimeGiftsCount,
+      lifetimeGiftValue,
+      lifetimeTotalValue: lifetimeNevta + lifetimeNahuchua + lifetimeGiftValue
+    };
+  }
+
+  // --- Vyavhar (Return Gifts) ---
+  public getReturnGifts(guestId?: string): ReturnGiftRecord[] {
+    if (guestId) return this.returnGifts.filter(r => r.guest_id === guestId);
+    return [...this.returnGifts];
+  }
+  public addReturnGift(recordData: Omit<ReturnGiftRecord, 'id' | 'created_at' | 'updated_at'>): ReturnGiftRecord {
+    const newRecord: ReturnGiftRecord = {
+      ...recordData,
+      id: 'rgn-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
+    this.returnGifts.unshift(newRecord);
+    this.saveAll();
+    return newRecord;
+  }
+  public deleteReturnGift(id: string): boolean {
+    const idx = this.returnGifts.findIndex(r => r.id === id);
+    if (idx === -1) return false;
+    this.returnGifts.splice(idx, 1);
+    this.saveAll();
+    return true;
+  }
+  public getVyavharSummary(guestId: string): VyavharSummary | null {
+    const guest = this.getGuestById(guestId);
+    if (!guest) return null;
+    const family = guest.family_id ? this.families.find(f => f.id === guest.family_id) : undefined;
+    const lifetimeHistory = this.getGuestLifetimeHistory(guestId);
+    const softwareReceived = lifetimeHistory ? lifetimeHistory.lifetimeTotalValue : 0;
+
+    const guestRecords = this.getReturnGifts(guestId);
+    const extraReceived = guestRecords.filter(r => r.direction === 'received_by_us').reduce((s, r) => s + r.amount, 0);
+    const totalReceived = softwareReceived + extraReceived;
+    const totalGiven = guestRecords.filter(r => r.direction === 'given_by_us').reduce((s, r) => s + r.amount, 0);
+    const balance = totalGiven - totalReceived;
+
+    let status: 'settled' | 'surplus_given' | 'pending_return' = 'settled';
+    if (balance > 0) status = 'surplus_given';
+    else if (balance < 0) status = 'pending_return';
+
+    return { guest, family, totalReceived, totalGiven, balance, status, records: guestRecords };
+  }
+
+  // --- Backup & Restore JSON ---
+  public generateBackupJson(): string {
+    const backupData = {
+      version: '4.0',
+      exported_at: new Date().toISOString(),
+      exported_by: this.currentUser?.name || this.settings.operator_name || 'Sultan',
+      data: {
+        events: this.events,
+        ceremonies: this.ceremonies,
+        guests: this.guests,
+        families: this.families,
+        transactions: this.transactions,
+        gifts: this.gifts,
+        auditLogs: this.auditLogs,
+        settings: this.settings,
+        activeEventId: this.activeEventId,
+        activeCeremonyId: this.activeCeremonyId,
+        users: this.users
+      }
+    };
+    return JSON.stringify(backupData, null, 2);
+  }
+
+  public restoreBackupJson(jsonString: string): boolean {
+    try {
+      const parsed = JSON.parse(jsonString);
+      if (!parsed.data || !Array.isArray(parsed.data.events)) throw new Error('Invalid schema');
+      this.events = parsed.data.events;
+      this.ceremonies = parsed.data.ceremonies || [...SEED_CEREMONIES];
+      this.guests = parsed.data.guests;
+      this.families = parsed.data.families || [];
+      this.transactions = parsed.data.transactions || [];
+      this.gifts = parsed.data.gifts || [];
+      this.auditLogs = parsed.data.auditLogs || [];
+      this.settings = parsed.data.settings || DEFAULT_SETTINGS;
+      this.activeEventId = parsed.data.activeEventId || 'evt-1';
+      this.activeCeremonyId = parsed.data.activeCeremonyId || 'crm-1-3';
+      if (parsed.data.users) this.users = parsed.data.users;
+      this.saveAll();
+      return true;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
+  }
+
+  // --- Analytics with Breakdowns ---
   public getEventAnalytics(eventId?: string, ceremonyId?: string) {
     const targetEventId = eventId || this.activeEventId;
     const activeTxns = this.getTransactions(targetEventId, ceremonyId);
@@ -946,6 +715,43 @@ class DatabaseService {
     const totalNevta = activeTxns.filter(t => t.type === 'nevta').reduce((sum, t) => sum + t.amount, 0);
     const totalNahuchua = activeTxns.filter(t => t.type === 'nahuchua').reduce((sum, t) => sum + t.amount, 0);
     const uniqueGuestIds = new Set<string>([...activeTxns.map(t => t.guest_id), ...activeGifts.map(g => g.guest_id)]);
+
+    const villageMap: Record<string, { guests: number; nevta: number; nahuchua: number; total: number }> = {};
+    const sideMap: Record<string, { count: number; total: number }> = {
+      'Groom Side': { count: 0, total: 0 },
+      'Bride Side': { count: 0, total: 0 },
+      'Host Side': { count: 0, total: 0 },
+      'Other': { count: 0, total: 0 }
+    };
+    const relationMap: Record<string, { count: number; total: number }> = {};
+
+    uniqueGuestIds.forEach(gid => {
+      const g = this.getGuestById(gid);
+      if (!g) return;
+      const vName = g.village || 'Other / Unknown';
+      if (!villageMap[vName]) villageMap[vName] = { guests: 0, nevta: 0, nahuchua: 0, total: 0 };
+      villageMap[vName].guests += 1;
+
+      const gTxns = activeTxns.filter(t => t.guest_id === gid);
+      const gNevta = gTxns.filter(t => t.type === 'nevta').reduce((s, t) => s + t.amount, 0);
+      const gNahuchua = gTxns.filter(t => t.type === 'nahuchua').reduce((s, t) => s + t.amount, 0);
+      const gTotal = gNevta + gNahuchua;
+
+      villageMap[vName].nevta += gNevta;
+      villageMap[vName].nahuchua += gNahuchua;
+      villageMap[vName].total += gTotal;
+
+      const sideKey = g.side || 'Other';
+      if (sideMap[sideKey]) {
+        sideMap[sideKey].count += 1;
+        sideMap[sideKey].total += gTotal;
+      }
+
+      const relKey = g.relation || 'Other';
+      if (!relationMap[relKey]) relationMap[relKey] = { count: 0, total: 0 };
+      relationMap[relKey].count += 1;
+      relationMap[relKey].total += gTotal;
+    });
 
     return {
       totalGuests: uniqueGuestIds.size,
@@ -960,12 +766,11 @@ class DatabaseService {
         upi: activeTxns.filter(t => t.payment_method === 'UPI').reduce((sum, t) => sum + t.amount, 0),
         bank: activeTxns.filter(t => t.payment_method === 'Bank Transfer').reduce((sum, t) => sum + t.amount, 0),
         cheque: activeTxns.filter(t => t.payment_method === 'Cheque').reduce((sum, t) => sum + t.amount, 0)
-      }
+      },
+      villageBreakdown: villageMap,
+      sideBreakdown: sideMap,
+      relationBreakdown: relationMap
     };
-  }
-
-  public getAuditLogs(): AuditLog[] {
-    return [...this.auditLogs];
   }
 }
 
