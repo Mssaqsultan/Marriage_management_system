@@ -1,4 +1,4 @@
-import { 
+import type { 
   Event, Guest, Family, Transaction, Gift, AuditLog, AppSettings, GuestHistorySummary, User, Ceremony, ReturnGiftRecord, VyavharSummary 
 } from '../types';
 import { cloudSync } from './supabaseSync';
