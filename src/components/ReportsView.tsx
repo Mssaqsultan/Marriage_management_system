@@ -14,10 +14,15 @@ import {
   Crown,
   Calendar,
   Building,
-  MessageSquare
+  MessageSquare,
+  Edit2,
+  Plus,
+  Save,
+  X
 } from 'lucide-react';
-import { Event, Guest, Transaction, Gift as GiftType } from '../types';
+import { Event, Guest, Transaction, Gift as GiftType, PaymentMethod } from '../types';
 import { db } from '../services/db';
+import { cloudSync } from '../services/supabaseSync';
 import { exportGuestReportCSV, exportVillageReportCSV } from '../services/export';
 import { t, getLanguageFontClass } from '../utils/i18n';
 
@@ -41,6 +46,15 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
   const langFont = getLanguageFontClass(currentLanguage);
   const [activeReportTab, setActiveReportTab] = useState<ReportTab>('guest');
   const [searchQuery, setSearchQuery] = useState('');
+  const [editingGuestAmount, setEditingGuestAmount] = useState<{
+    guestId: string;
+    guestName: string;
+    fatherName?: string;
+    nevta: number;
+    nahuchua: number;
+    paymentMethod: PaymentMethod;
+  } | null>(null);
+  const [isSavingAmount, setIsSavingAmount] = useState(false);
 
   const guests = db.getGuests();
   const txns = db.getTransactions(activeEvent.id);
@@ -50,6 +64,41 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
 
   const formatRupees = (amount: number) => {
     return '₹' + amount.toLocaleString('en-IN');
+  };
+
+  const handleOpenAddAmount = (g: Guest, currentNevta: number, currentNahuchua: number, currentMode: string) => {
+    setEditingGuestAmount({
+      guestId: g.id,
+      guestName: g.name,
+      fatherName: g.father_husband_name,
+      nevta: currentNevta,
+      nahuchua: currentNahuchua,
+      paymentMethod: (currentMode && currentMode !== '-' ? currentMode.split(',')[0].trim() : 'Cash') as PaymentMethod
+    });
+  };
+
+  const handleSaveGuestAmount = async () => {
+    if (!editingGuestAmount) return;
+    setIsSavingAmount(true);
+    try {
+      const { nevtaTxn, nahuchuaTxn } = db.setGuestEventTransactions(
+        activeEvent.id,
+        editingGuestAmount.guestId,
+        undefined,
+        editingGuestAmount.nevta,
+        editingGuestAmount.nahuchua,
+        editingGuestAmount.paymentMethod,
+        db.getCurrentUser()?.name || 'Operator'
+      );
+      if (nevtaTxn) await cloudSync.pushTransaction(nevtaTxn);
+      if (nahuchuaTxn) await cloudSync.pushTransaction(nahuchuaTxn);
+      onSuccessToast(`✅ Amount saved & synced to online database for "${editingGuestAmount.guestName}"!`);
+      setEditingGuestAmount(null);
+    } catch (err: any) {
+      alert('Failed to sync amount: ' + (err?.message || 'Please try again'));
+    } finally {
+      setIsSavingAmount(false);
+    }
   };
 
   const handleExportCSV = () => {
@@ -255,6 +304,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
                 <th className="py-2.5 px-2 print:py-1 print:px-0.5 text-right w-[11%]">Total Cash</th>
                 <th className="py-2.5 px-1.5 print:py-1 print:px-0.5 text-center w-[5%]">Gifts</th>
                 <th className="py-2.5 px-1.5 print:py-1 print:px-0.5 text-center w-[5%]">Mode</th>
+                <th className="py-2.5 px-1.5 text-center no-print w-[7%]">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800 font-medium">
@@ -300,6 +350,25 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
                       ) : '-'}
                     </td>
                     <td className="py-2.5 px-1.5 print:py-1 print:px-0.5 text-neutral-600 dark:text-neutral-400 text-[11px] print:text-[7.5px] font-semibold text-center">{pModes}</td>
+                    <td className="py-2.5 px-1.5 print:py-1 print:px-0.5 text-center no-print">
+                      {total === 0 ? (
+                        <button
+                          onClick={() => handleOpenAddAmount(g, nevta, nahuchua, pModes)}
+                          className="px-2 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-900 dark:text-amber-200 border border-amber-500/40 text-[10px] font-black cursor-pointer shadow-sm hover:scale-105 transition-all whitespace-nowrap"
+                          title="Enter missing Nevta / Nahuchua amount for this guest"
+                        >
+                          + Add Amount
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => handleOpenAddAmount(g, nevta, nahuchua, pModes)}
+                          className="p-1.5 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-800 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors cursor-pointer"
+                          title="Edit amount"
+                        >
+                          <Edit2 className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
+                        </button>
+                      )}
+                    </td>
                   </tr>
                 );
               })}
@@ -312,9 +381,114 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
                 <td className="py-3 px-2 print:py-1.5 print:px-0.5 text-right font-black text-[#78350F] dark:text-amber-300 font-outfit text-base print:text-[9px]">{formatRupees(analytics.totalCollection)}</td>
                 <td className="py-3 px-1.5 print:py-1.5 print:px-0.5 text-center font-bold text-[#581C87] dark:text-purple-300 print:text-[8px]">{analytics.totalGiftItems}</td>
                 <td></td>
+                <td className="no-print"></td>
               </tr>
             </tfoot>
           </table>
+        </div>
+      )}
+
+      {/* Quick Amount Edit / Add Modal */}
+      {editingGuestAmount && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
+          <div className="royal-glass w-full max-w-md rounded-3xl p-6 border-2 border-amber-500/50 shadow-2xl bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 space-y-4">
+            <div className="flex items-center justify-between border-b border-neutral-200 dark:border-neutral-800 pb-3">
+              <div>
+                <h3 className="text-lg font-black font-cinzel text-neutral-900 dark:text-neutral-100">
+                  {editingGuestAmount.nevta > 0 || editingGuestAmount.nahuchua > 0 ? 'Edit Amount' : 'Enter Amount / नेवता दर्ज करें'}
+                </h3>
+                <p className="text-xs text-[#78350F] dark:text-amber-300 font-bold">
+                  {editingGuestAmount.guestName} {editingGuestAmount.fatherName ? `(S/o ${editingGuestAmount.fatherName})` : ''}
+                </p>
+              </div>
+              <button
+                onClick={() => setEditingGuestAmount(null)}
+                className="p-1.5 rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-500 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-4 text-xs font-semibold">
+              <div>
+                <label className="form-label text-[#78350F] dark:text-amber-300">Nevta Amount (₹)</label>
+                <input
+                  type="number"
+                  value={editingGuestAmount.nevta || ''}
+                  onChange={(e) => setEditingGuestAmount({ ...editingGuestAmount, nevta: parseFloat(e.target.value) || 0 })}
+                  placeholder="0"
+                  className="royal-input text-lg font-black font-outfit"
+                />
+                <div className="flex flex-wrap gap-1 mt-1.5">
+                  {[501, 1100, 2100, 5100, 11000].map(amt => (
+                    <button
+                      key={amt}
+                      type="button"
+                      onClick={() => setEditingGuestAmount({ ...editingGuestAmount, nevta: amt })}
+                      className="px-2 py-0.5 rounded bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-[10px] text-amber-900 dark:text-amber-300 font-bold cursor-pointer"
+                    >
+                      ₹{amt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="form-label text-[#064E3B] dark:text-emerald-300">Nahuchua Amount (₹)</label>
+                <input
+                  type="number"
+                  value={editingGuestAmount.nahuchua || ''}
+                  onChange={(e) => setEditingGuestAmount({ ...editingGuestAmount, nahuchua: parseFloat(e.target.value) || 0 })}
+                  placeholder="0"
+                  className="royal-input text-lg font-black font-outfit"
+                />
+                <div className="flex flex-wrap gap-1 mt-1.5">
+                  {[251, 501, 1100, 2100].map(amt => (
+                    <button
+                      key={amt}
+                      type="button"
+                      onClick={() => setEditingGuestAmount({ ...editingGuestAmount, nahuchua: amt })}
+                      className="px-2 py-0.5 rounded bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-[10px] text-emerald-900 dark:text-emerald-300 font-bold cursor-pointer"
+                    >
+                      ₹{amt}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="form-label">Payment Method</label>
+                <select
+                  value={editingGuestAmount.paymentMethod}
+                  onChange={(e) => setEditingGuestAmount({ ...editingGuestAmount, paymentMethod: e.target.value as PaymentMethod })}
+                  className="royal-input"
+                >
+                  {['Cash', 'UPI', 'Bank Transfer', 'Cheque', 'Other'].map(m => (
+                    <option key={m} value={m}>{m}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-neutral-200 dark:border-neutral-800">
+              <button
+                type="button"
+                onClick={() => setEditingGuestAmount(null)}
+                className="px-4 py-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-xs font-bold cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={isSavingAmount}
+                onClick={handleSaveGuestAmount}
+                className="gold-gradient-btn px-6 py-2 rounded-xl text-xs font-black shadow-lg flex items-center gap-1.5 disabled:opacity-60 cursor-pointer"
+              >
+                <Save className="w-4 h-4" />
+                <span>{isSavingAmount ? 'Saving & Syncing...' : 'Save & Sync Online'}</span>
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

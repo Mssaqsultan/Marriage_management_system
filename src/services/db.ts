@@ -1,5 +1,5 @@
 import {
-  Event, Guest, Family, Transaction, Gift, AuditLog, AppSettings, GuestHistorySummary, User, Ceremony, ReturnGiftRecord, VyavharSummary
+  Event, Guest, Family, Transaction, Gift, AuditLog, AppSettings, GuestHistorySummary, User, Ceremony, ReturnGiftRecord, VyavharSummary, PaymentMethod
 } from '../types';
 import { cloudSync } from './supabaseSync';
 
@@ -231,6 +231,7 @@ class DatabaseService {
     this.auditLogs.unshift(log);
     if (this.auditLogs.length > 500) this.auditLogs.pop();
     localStorage.setItem(STORAGE_KEYS.AUDIT_LOGS, JSON.stringify(this.auditLogs));
+    cloudSync.pushAuditLog(log);
   }
   public getAuditLogs(): AuditLog[] { return [...this.auditLogs]; }
   public getSettings(): AppSettings { return { ...this.settings }; }
@@ -241,19 +242,32 @@ class DatabaseService {
     return this.settings;
   }
 
-  // --- Overrides ---
-  public overrideUsers(users: User[]) { this.users = users; this.saveAll(); }
-  public overrideSettings(settings: Partial<AppSettings>) { this.settings = { ...this.settings, ...settings }; this.saveAll(); }
-  public overrideEvents(events: Event[]) {
-    this.events = events.filter(e => e.id !== 'evt-1' && e.name !== 'Sultan Ki Grand Shaadi');
+  // --- Intelligent Merge Methods (Never clobbers unsynced local data) ---
+  public mergeEvents(cloudEvents: Event[]) {
+    const cloudMap = new Map(cloudEvents.map(e => [e.id, e]));
+    const merged: Event[] = [...cloudEvents];
+    for (const localEvent of this.events) {
+      if (!cloudMap.has(localEvent.id) && localEvent.id !== 'evt-1' && localEvent.name !== 'Sultan Ki Grand Shaadi') {
+        merged.unshift(localEvent);
+      }
+    }
+    this.events = merged.filter(e => e.id !== 'evt-1' && e.name !== 'Sultan Ki Grand Shaadi');
     if (!this.events.some(e => e.id === this.activeEventId)) {
       this.activeEventId = this.events[0]?.id || '';
       localStorage.setItem(STORAGE_KEYS.ACTIVE_EVENT_ID, this.activeEventId);
     }
     this.saveAll();
   }
-  public overrideCeremonies(ceremonies: Ceremony[]) {
-    this.ceremonies = ceremonies.filter(c => c.event_id !== 'evt-1');
+
+  public mergeCeremonies(cloudCeremonies: Ceremony[]) {
+    const cloudMap = new Map(cloudCeremonies.map(c => [c.id, c]));
+    const merged: Ceremony[] = [...cloudCeremonies];
+    for (const localCrm of this.ceremonies) {
+      if (!cloudMap.has(localCrm.id) && localCrm.event_id !== 'evt-1') {
+        merged.push(localCrm);
+      }
+    }
+    this.ceremonies = merged.filter(c => c.event_id !== 'evt-1');
     const validCeremonies = this.getCeremonies(this.activeEventId);
     if (!validCeremonies.some(c => c.id === this.activeCeremonyId)) {
       this.activeCeremonyId = validCeremonies[0]?.id || '';
@@ -261,10 +275,100 @@ class DatabaseService {
     }
     this.saveAll();
   }
-  public overrideFamilies(families: Family[]) { this.families = families; this.saveAll(); }
-  public overrideGuests(guests: Guest[]) { this.guests = guests; this.saveAll(); }
-  public overrideTransactions(transactions: Transaction[]) { this.transactions = transactions; this.saveAll(); }
-  public overrideGifts(gifts: Gift[]) { this.gifts = gifts; this.saveAll(); }
+
+  public mergeFamilies(cloudFamilies: Family[]) {
+    const cloudMap = new Map(cloudFamilies.map(f => [f.id, f]));
+    const merged: Family[] = [...cloudFamilies];
+    for (const localFam of this.families) {
+      if (!cloudMap.has(localFam.id) && localFam.id !== 'fam-1') {
+        merged.unshift(localFam);
+      }
+    }
+    this.families = merged.filter(f => f.id !== 'fam-1');
+    this.saveAll();
+  }
+
+  public mergeGuests(cloudGuests: Guest[]) {
+    const cloudMap = new Map(cloudGuests.map(g => [g.id, g]));
+    const merged: Guest[] = [...cloudGuests];
+    for (const localGuest of this.guests) {
+      if (!cloudMap.has(localGuest.id) && localGuest.id !== 'gst-1') {
+        merged.unshift(localGuest);
+      }
+    }
+    this.guests = merged.filter(g => g.id !== 'gst-1');
+    this.saveAll();
+  }
+
+  public mergeTransactions(cloudTransactions: Transaction[]) {
+    const cloudMap = new Map(cloudTransactions.map(t => [t.id, t]));
+    const merged: Transaction[] = [...cloudTransactions];
+    for (const localTxn of this.transactions) {
+      if (!cloudMap.has(localTxn.id)) {
+        merged.unshift(localTxn);
+      }
+    }
+    this.transactions = merged;
+    this.saveAll();
+  }
+
+  public mergeGifts(cloudGifts: Gift[]) {
+    const cloudMap = new Map(cloudGifts.map(g => [g.id, g]));
+    const merged: Gift[] = [...cloudGifts];
+    for (const localGift of this.gifts) {
+      if (!cloudMap.has(localGift.id)) {
+        merged.unshift(localGift);
+      }
+    }
+    this.gifts = merged;
+    this.saveAll();
+  }
+
+  public mergeReturnGifts(cloudRecords: ReturnGiftRecord[]) {
+    const cloudMap = new Map(cloudRecords.map(r => [r.id, r]));
+    const merged: ReturnGiftRecord[] = [...cloudRecords];
+    for (const localRec of this.returnGifts) {
+      if (!cloudMap.has(localRec.id)) {
+        merged.unshift(localRec);
+      }
+    }
+    this.returnGifts = merged;
+    this.saveAll();
+  }
+
+  public mergeUsers(cloudUsers: User[]) {
+    const cloudMap = new Map(cloudUsers.map(u => [u.id, u]));
+    const merged: User[] = [...cloudUsers];
+    for (const localUser of this.users) {
+      if (!cloudMap.has(localUser.id)) {
+        merged.push(localUser);
+      }
+    }
+    this.users = merged;
+    this.saveAll();
+  }
+
+  public mergeAuditLogs(cloudLogs: AuditLog[]) {
+    const cloudMap = new Map(cloudLogs.map(l => [l.id, l]));
+    const merged: AuditLog[] = [...cloudLogs];
+    for (const localLog of this.auditLogs) {
+      if (!cloudMap.has(localLog.id)) {
+        merged.unshift(localLog);
+      }
+    }
+    this.auditLogs = merged.slice(0, 500);
+    this.saveAll();
+  }
+
+  // --- Overrides (delegates to safe merge where applicable) ---
+  public overrideUsers(users: User[]) { this.mergeUsers(users); }
+  public overrideSettings(settings: Partial<AppSettings>) { this.settings = { ...this.settings, ...settings }; this.saveAll(); }
+  public overrideEvents(events: Event[]) { this.mergeEvents(events); }
+  public overrideCeremonies(ceremonies: Ceremony[]) { this.mergeCeremonies(ceremonies); }
+  public overrideFamilies(families: Family[]) { this.mergeFamilies(families); }
+  public overrideGuests(guests: Guest[]) { this.mergeGuests(guests); }
+  public overrideTransactions(transactions: Transaction[]) { this.mergeTransactions(transactions); }
+  public overrideGifts(gifts: Gift[]) { this.mergeGifts(gifts); }
 
   // --- Events ---
   public getEvents(includeArchived = false): Event[] { return this.events.filter(e => includeArchived || e.status !== 'Archived'); }
@@ -458,6 +562,7 @@ class DatabaseService {
     const newFamily: Family = { ...familyData, id: 'fam-' + Date.now(), created_at: new Date().toISOString(), updated_at: new Date().toISOString() };
     this.families.unshift(newFamily);
     this.saveAll();
+    cloudSync.pushFamily(newFamily);
     return newFamily;
   }
   public updateFamily(id: string, updates: Partial<Family>): Family | null {
@@ -508,6 +613,79 @@ class DatabaseService {
     this.saveAll();
     cloudSync.pushTransaction(newTxn);
     return newTxn;
+  }
+  public updateTransaction(id: string, updates: Partial<Transaction>): Transaction | null {
+    const idx = this.transactions.findIndex(t => t.id === id);
+    if (idx === -1) return null;
+    this.transactions[idx] = {
+      ...this.transactions[idx],
+      ...updates,
+      updated_at: new Date().toISOString()
+    };
+    this.saveAll();
+    cloudSync.pushTransaction(this.transactions[idx]);
+    return this.transactions[idx];
+  }
+  public setGuestEventTransactions(
+    eventId: string,
+    guestId: string,
+    ceremonyId: string | undefined,
+    nevtaAmount: number,
+    nahuchuaAmount: number,
+    paymentMethod: PaymentMethod = 'Cash',
+    createdBy: string = 'Operator'
+  ): { nevtaTxn?: Transaction; nahuchuaTxn?: Transaction } {
+    const existingNevta = this.transactions.find(t => t.event_id === eventId && t.guest_id === guestId && t.type === 'nevta' && !t.deleted_at);
+    let nevtaTxn: Transaction | undefined;
+    if (nevtaAmount > 0) {
+      if (existingNevta) {
+        nevtaTxn = this.updateTransaction(existingNevta.id, {
+          amount: Math.round(nevtaAmount),
+          payment_method: paymentMethod,
+          ceremony_id: ceremonyId || existingNevta.ceremony_id
+        }) || undefined;
+      } else {
+        nevtaTxn = this.addTransaction({
+          event_id: eventId,
+          ceremony_id: ceremonyId,
+          guest_id: guestId,
+          type: 'nevta',
+          amount: Math.round(nevtaAmount),
+          payment_method: paymentMethod,
+          transaction_date: new Date().toISOString(),
+          created_by: createdBy
+        });
+      }
+    } else if (existingNevta && nevtaAmount === 0) {
+      this.deleteTransaction(existingNevta.id);
+    }
+
+    const existingNahuchua = this.transactions.find(t => t.event_id === eventId && t.guest_id === guestId && t.type === 'nahuchua' && !t.deleted_at);
+    let nahuchuaTxn: Transaction | undefined;
+    if (nahuchuaAmount > 0) {
+      if (existingNahuchua) {
+        nahuchuaTxn = this.updateTransaction(existingNahuchua.id, {
+          amount: Math.round(nahuchuaAmount),
+          payment_method: paymentMethod,
+          ceremony_id: ceremonyId || existingNahuchua.ceremony_id
+        }) || undefined;
+      } else {
+        nahuchuaTxn = this.addTransaction({
+          event_id: eventId,
+          ceremony_id: ceremonyId,
+          guest_id: guestId,
+          type: 'nahuchua',
+          amount: Math.round(nahuchuaAmount),
+          payment_method: paymentMethod,
+          transaction_date: new Date().toISOString(),
+          created_by: createdBy
+        });
+      }
+    } else if (existingNahuchua && nahuchuaAmount === 0) {
+      this.deleteTransaction(existingNahuchua.id);
+    }
+
+    return { nevtaTxn, nahuchuaTxn };
   }
   public getGifts(eventId?: string, ceremonyId?: string, includeDeleted = false): Gift[] {
     return this.gifts.filter(g => {
@@ -613,6 +791,7 @@ class DatabaseService {
     };
     this.returnGifts.unshift(newRecord);
     this.saveAll();
+    cloudSync.pushReturnGift(newRecord);
     return newRecord;
   }
   public deleteReturnGift(id: string): boolean {
@@ -620,6 +799,7 @@ class DatabaseService {
     if (idx === -1) return false;
     this.returnGifts.splice(idx, 1);
     this.saveAll();
+    cloudSync.deleteReturnGift(id);
     return true;
   }
   public getVyavharSummary(guestId: string): VyavharSummary | null {
@@ -681,6 +861,7 @@ class DatabaseService {
       this.activeCeremonyId = parsed.data.activeCeremonyId || this.ceremonies[0]?.id || '';
       if (parsed.data.users) this.users = parsed.data.users;
       this.saveAll();
+      cloudSync.pullFromCloud().catch(err => console.warn('Sync after restore error:', err));
       return true;
     } catch (e) {
       console.error(e);

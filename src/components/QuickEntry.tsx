@@ -33,6 +33,7 @@ import {
 import confetti from 'canvas-confetti';
 import { Event, Guest, RelationType, SideType, PaymentMethod, GiftCategory, User, Ceremony } from '../types';
 import { db } from '../services/db';
+import { cloudSync } from '../services/supabaseSync';
 import { TransliteratedInput } from './TransliteratedInput';
 import { getTransliterations, detectScript } from '../utils/transliteration';
 import { t, getLanguageFontClass } from '../utils/i18n';
@@ -118,6 +119,7 @@ export const QuickEntry: React.FC<QuickEntryProps> = ({
   
   // Voice Assistant & Soundbox State
   const [isListeningVoice, setIsListeningVoice] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [voiceStatusText, setVoiceStatusText] = useState<string>('');
   const [voiceLang, setVoiceLang] = useState<'hi-IN' | 'en-IN' | 'ur-PK'>('hi-IN');
   const [soundboxEnabled, setSoundboxEnabled] = useState<boolean>(() => {
@@ -295,8 +297,9 @@ export const QuickEntry: React.FC<QuickEntryProps> = ({
     }
   };
 
-  const handleSubmit = (e?: React.FormEvent) => {
+  const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
+    if (isSubmitting) return;
 
     if (isNewGuestMode && !name.trim()) {
       alert('Please enter Guest Full Name');
@@ -312,119 +315,132 @@ export const QuickEntry: React.FC<QuickEntryProps> = ({
       return;
     }
 
-    let guestIdToUse = selectedGuestId;
+    setIsSubmitting(true);
+    try {
+      let guestIdToUse = selectedGuestId;
 
-    // Create new guest if needed
-    if (isNewGuestMode) {
-      const createdGuest = db.addGuest({
-        name: name.trim(),
-        father_husband_name: fatherName.trim() || undefined,
-        mobile: mobile.trim() || undefined,
+      // Create new guest if needed - AWAIT push to cloud so guest exists before transactions
+      if (isNewGuestMode) {
+        const createdGuest = db.addGuest({
+          name: name.trim(),
+          father_husband_name: fatherName.trim() || undefined,
+          mobile: mobile.trim() || undefined,
+          village: village.trim() || 'Chauriya khas',
+          relation,
+          side,
+          family_id: familyId || undefined,
+          notes: guestNotes.trim() || undefined
+        });
+        guestIdToUse = createdGuest.id;
+        // Guarantee guest is committed to Supabase before inserting dependent transactions
+        await cloudSync.pushGuest(createdGuest);
+      }
+
+      const targetCeremonyId = activeCeremony?.id || ceremonies[0]?.id;
+
+      // Record Nevta transaction
+      if (nevtaNum > 0) {
+        const txn = db.addTransaction({
+          event_id: activeEvent.id,
+          ceremony_id: targetCeremonyId,
+          guest_id: guestIdToUse,
+          type: 'nevta',
+          amount: Math.round(nevtaNum),
+          payment_method: paymentMethod,
+          payment_reference: paymentRef.trim() || undefined,
+          transaction_date: new Date().toISOString(),
+          notes: txnNotes.trim() || undefined,
+          created_by: currentUser?.name || 'Operator'
+        });
+        await cloudSync.pushTransaction(txn);
+      }
+
+      // Record Nahuchua transaction
+      if (nahuchuaNum > 0) {
+        const txn = db.addTransaction({
+          event_id: activeEvent.id,
+          ceremony_id: targetCeremonyId,
+          guest_id: guestIdToUse,
+          type: 'nahuchua',
+          amount: Math.round(nahuchuaNum),
+          payment_method: paymentMethod,
+          payment_reference: paymentRef.trim() || undefined,
+          transaction_date: new Date().toISOString(),
+          notes: txnNotes.trim() || undefined,
+          created_by: currentUser?.name || 'Operator'
+        });
+        await cloudSync.pushTransaction(txn);
+      }
+
+      // Record physical gift if entered
+      if (hasGift && giftItemName.trim()) {
+        const gift = db.addGift({
+          event_id: activeEvent.id,
+          ceremony_id: targetCeremonyId,
+          guest_id: guestIdToUse,
+          item_name: giftItemName.trim(),
+          category: giftCategory,
+          quantity: 1,
+          estimated_value: Math.round(giftValueNum),
+          condition: 'New Box',
+          notes: txnNotes.trim() || undefined
+        });
+        await cloudSync.pushGift(gift);
+      }
+
+      const receiptId = `NVT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+      const receiptData: WhatsAppReceiptData = {
+        guestName: name.trim(),
+        fatherName: fatherName.trim() || undefined,
+        mobile: mobile.trim() || '',
         village: village.trim() || 'Chauriya khas',
-        relation,
-        side,
-        family_id: familyId || undefined,
-        notes: guestNotes.trim() || undefined
+        nevtaAmount: Math.round(nevtaNum),
+        nahuchuaAmount: Math.round(nahuchuaNum),
+        giftItemName: (hasGift && giftItemName.trim()) ? giftItemName.trim() : undefined,
+        totalCash: Math.round(nevtaNum + nahuchuaNum),
+        paymentMethod: paymentMethod,
+        paymentRef: paymentRef.trim() || undefined,
+        receiptId: receiptId,
+        eventName: activeEvent.name,
+        ceremonyName: activeCeremony?.name || activeEvent.name,
+        hostName: activeEvent.host_name || activeEvent.name,
+        venue: activeEvent.venue,
+        relation: relation,
+        side: side
+      };
+
+      // If mobile number was provided, prepare and open WhatsApp receipt modal
+      if (mobile.trim()) {
+        setWaModalData(receiptData);
+      }
+
+      // Trigger celebration effects
+      confetti({
+        particleCount: 75,
+        spread: 60,
+        origin: { y: 0.8 },
+        colors: ['#F59E0B', '#10B981', '#EAB308', '#8B5CF6']
       });
-      guestIdToUse = createdGuest.id;
+
+      // 🔊 Voice Soundbox Live Audio Announcement
+      if (soundboxEnabled && (nevtaNum > 0 || nahuchuaNum > 0)) {
+        soundboxService.announceTransaction(
+          name.trim(),
+          Math.round(nevtaNum + nahuchuaNum),
+          nevtaNum > 0 ? 'nevta' : 'nahuchua',
+          activeCeremony?.name
+        );
+      }
+
+      setLastSavedGuest({ name: name.trim(), amount: Math.round(nevtaNum + nahuchuaNum) });
+      onSuccessToast(`Saved & Synced entry for "${name}" (₹${Math.round(nevtaNum + nahuchuaNum)})`);
+      resetForm();
+    } catch (err: any) {
+      console.error('Error during entry save:', err);
+      alert('Error saving entry: ' + (err?.message || 'Please try again'));
+    } finally {
+      setIsSubmitting(false);
     }
-
-    const targetCeremonyId = activeCeremony?.id || ceremonies[0]?.id;
-
-    // Record Nevta transaction
-    if (nevtaNum > 0) {
-      db.addTransaction({
-        event_id: activeEvent.id,
-        ceremony_id: targetCeremonyId,
-        guest_id: guestIdToUse,
-        type: 'nevta',
-        amount: Math.round(nevtaNum),
-        payment_method: paymentMethod,
-        payment_reference: paymentRef.trim() || undefined,
-        transaction_date: new Date().toISOString(),
-        notes: txnNotes.trim() || undefined,
-        created_by: currentUser?.name || 'Operator'
-      });
-    }
-
-    // Record Nahuchua transaction
-    if (nahuchuaNum > 0) {
-      db.addTransaction({
-        event_id: activeEvent.id,
-        ceremony_id: targetCeremonyId,
-        guest_id: guestIdToUse,
-        type: 'nahuchua',
-        amount: Math.round(nahuchuaNum),
-        payment_method: paymentMethod,
-        payment_reference: paymentRef.trim() || undefined,
-        transaction_date: new Date().toISOString(),
-        notes: txnNotes.trim() || undefined,
-        created_by: currentUser?.name || 'Operator'
-      });
-    }
-
-    // Record physical gift if entered
-    if (hasGift && giftItemName.trim()) {
-      db.addGift({
-        event_id: activeEvent.id,
-        ceremony_id: targetCeremonyId,
-        guest_id: guestIdToUse,
-        item_name: giftItemName.trim(),
-        category: giftCategory,
-        quantity: 1,
-        estimated_value: Math.round(giftValueNum),
-        condition: 'New Box',
-        notes: txnNotes.trim() || undefined
-      });
-    }
-
-    const receiptId = `NVT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
-    const receiptData: WhatsAppReceiptData = {
-      guestName: name.trim(),
-      fatherName: fatherName.trim() || undefined,
-      mobile: mobile.trim() || '',
-      village: village.trim() || 'Chauriya khas',
-      nevtaAmount: Math.round(nevtaNum),
-      nahuchuaAmount: Math.round(nahuchuaNum),
-      giftItemName: (hasGift && giftItemName.trim()) ? giftItemName.trim() : undefined,
-      totalCash: Math.round(nevtaNum + nahuchuaNum),
-      paymentMethod: paymentMethod,
-      paymentRef: paymentRef.trim() || undefined,
-      receiptId: receiptId,
-      eventName: activeEvent.name,
-      ceremonyName: activeCeremony?.name || activeEvent.name,
-      hostName: activeEvent.host_name || activeEvent.name,
-      venue: activeEvent.venue,
-      relation: relation,
-      side: side
-    };
-
-    // If mobile number was provided, prepare and open WhatsApp receipt modal
-    if (mobile.trim()) {
-      setWaModalData(receiptData);
-    }
-
-    // Trigger celebration effects
-    confetti({
-      particleCount: 75,
-      spread: 60,
-      origin: { y: 0.8 },
-      colors: ['#F59E0B', '#10B981', '#EAB308', '#8B5CF6']
-    });
-
-    // 🔊 Voice Soundbox Live Audio Announcement (Paytm style voice for wedding counter)
-    if (soundboxEnabled && (nevtaNum > 0 || nahuchuaNum > 0)) {
-      soundboxService.announceTransaction(
-        name.trim(),
-        Math.round(nevtaNum + nahuchuaNum),
-        nevtaNum > 0 ? 'nevta' : 'nahuchua',
-        activeCeremony?.name
-      );
-    }
-
-    setLastSavedGuest({ name: name.trim(), amount: Math.round(nevtaNum + nahuchuaNum) });
-    onSuccessToast(`Saved entry for "${name}" (₹${Math.round(nevtaNum + nahuchuaNum)})`);
-    resetForm();
   };
 
   const filteredGuests = allGuests.filter(g => {
@@ -1031,10 +1047,11 @@ export const QuickEntry: React.FC<QuickEntryProps> = ({
                 </button>
                 <button
                   type="submit"
-                  className="w-1/2 sm:w-auto gold-gradient-btn px-8 py-3 rounded-xl text-sm font-extrabold flex items-center justify-center gap-2 shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer"
+                  disabled={isSubmitting}
+                  className="w-1/2 sm:w-auto gold-gradient-btn px-8 py-3 rounded-xl text-sm font-extrabold flex items-center justify-center gap-2 shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   <Save className="w-4 h-4 stroke-[2.5]" />
-                  <span>{t('counter.btn_save_only', currentLanguage)}</span>
+                  <span>{isSubmitting ? 'Saving & Syncing...' : t('counter.btn_save_only', currentLanguage)}</span>
                 </button>
               </div>
             </div>
